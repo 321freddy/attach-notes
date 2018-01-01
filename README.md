@@ -8,3 +8,4 @@ All notes are saved when you export a blueprint as a string (but you need the mo
 Also adds signposts.
 
 ## [Mod Portal Link](https://mods.factorio.com/mods/321freddy/attach-notes)
+## [Forum Link](https://forums.factorio.com/viewtopic.php?f=92&t=56046)
