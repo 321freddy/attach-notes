@@ -24,7 +24,7 @@ local function generateIcon(name, subgroup, file, wrappedEntity, size)
 			type = "item-subgroup",
 			name = subgroup,
 			group = "signpost-icons",
-			order = subgroups
+			order = string.rep("a", subgroups)
 		}}
 	end
 
@@ -37,7 +37,7 @@ local function generateIcon(name, subgroup, file, wrappedEntity, size)
 			icon = file or "__attach-notes__/graphics/signpost-icons/"..name.."-icon.png",
 			icon_size = size or 32,
 			subgroup = subgroup,
-			order = order
+			order = string.rep("a", order),
 		}
 	}
 end
