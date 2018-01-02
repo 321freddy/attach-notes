@@ -1,0 +1,8 @@
+\.build\
+exclude.txt
+build.bat
+*.zip
+.zip
+\.git\
+\.github\
+.gitignore
