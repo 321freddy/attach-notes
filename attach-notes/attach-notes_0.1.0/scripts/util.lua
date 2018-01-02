@@ -31,20 +31,36 @@ function util.getSurroundingArea(pos, radius)
 			 right_bottom = { x = pos.x + radius, y = pos.y + radius } }
 end
 
-function util.isValid(object)
-	return type(object) == "table" and object.valid
+function util.calcArea(area)
+	return math.abs((area.right_bottom.x - area.left_top.x) * (area.right_bottom.y - area.left_top.y))
 end
 
-function util.isValidStack(stack)
-	return util.isValid(stack) and stack.valid_for_read
+function util.isValid(object)
+	return type(object) == "table" and object.valid
 end
 
 function util.destroyIfValid(object)
 	if util.isValid(object) then object.destroy() end
 end
 
+function util.isValidStack(stack)
+	return util.isValid(stack) and stack.valid_for_read
+end
+
 function util.isValidPlayer(player) -- valid, connected and alive player
 	return util.isValid(player) and player.connected and player.controller_type ~= defines.controllers.ghost
+end
+
+function util.isValidArea(area)
+	return area and area.left_top and area.right_bottom and util.calcArea(area) > 0
+end
+
+function util.fixArea(area) -- fix an area for use in surface.find_entities_filtered, returns key,value pair
+	if util.isValidArea(area) then
+		return "area", area
+	else
+		return "position", area.left_top
+	end
 end
 
 function util.iterateInvs(player, func) -- iterate over all ItemStacks of this player (in all inventories)

@@ -147,10 +147,10 @@ function this.on_player_deconstructed_area(event)
 	local player = game.players[event.player_index]
 	local notes = global.notes
 	
-	--dlog("deconsturcted area: surface: "..player.surface.name..", player: "..player.name)
-	
 	if not event.alt then
-		for _,interface in pairs(player.surface.find_entities_filtered{ area = event.area, force = player.force, name = "blueprint-note-interface" }) do
+		local key, area = util.fixArea(event.area)
+		
+		for _,interface in pairs(player.surface.find_entities_filtered{ [key] = area, force = player.force, name = "blueprint-note-interface" }) do
 			local unitNumber = components.bpInterface.getUnitNumber(interface)
 			local interfaceIsInvalid = true
 			
@@ -232,7 +232,9 @@ function this.on_player_setup_blueprint(event)
 	local notes = global.notes
 	
 	cache.blueprint = {} -- save attached notes to players cache
-	for _,interface in pairs(player.surface.find_entities_filtered{ name = "blueprint-note-interface", area = event.area, force = player.force }) do
+	local key, area = util.fixArea(event.area)
+	
+	for _,interface in pairs(player.surface.find_entities_filtered{ name = "blueprint-note-interface", [key] = area, force = player.force }) do
 		local unitNumber = components.bpInterface.getUnitNumber(interface)
 		cache.blueprint[unitNumber] = notes[unitNumber]
 	end
