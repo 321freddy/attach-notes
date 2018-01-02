@@ -6,3 +6,4 @@ build.bat
 \.git\
 \.github\
 .gitignore
+isdebug.lua

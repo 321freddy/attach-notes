@@ -1,4 +1,4 @@
-local DEBUG = true
+local DEBUG = pcall(require, "isdebug") and true or false
 
 scripts = {} -- custom scripts
 local funcs = {} -- Functions bound to their respective game event
@@ -125,3 +125,5 @@ registerHandler("on_edit_blueprint", "edit-blueprint")
 
 registerHandler("on_scripts_initialized", true)
 handleEvent{ name = "on_scripts_initialized" }
+
+dlog("Successfully initialized", "DEBUG =",DEBUG)
