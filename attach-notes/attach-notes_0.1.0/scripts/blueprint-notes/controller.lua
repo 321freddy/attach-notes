@@ -278,7 +278,7 @@ function this.encodeBlueprint(bp, stack) -- encode blueprint note to an item sta
 end
 
 function this.decodeBlueprint(item) -- decode blueprint note from an item stack
-	local entities = item.get_blueprint_entities()
+	local entities = item.get_blueprint_entities() or {}
 	local index, note = this.decodeBlueprintNote(entities)
 	
 	note.label = item.label

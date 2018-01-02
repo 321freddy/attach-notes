@@ -298,7 +298,7 @@ function this.filterStorages(stack) -- filter out note storages if their entity 
 end
 
 function this.convertBlueprint(player, cache, cursorStack) -- replace note interfaces of a blueprint with actual note storages
-	local entities = cursorStack.get_blueprint_entities()
+	local entities = cursorStack.get_blueprint_entities() or {}
 	for _,entity in ipairs(entities) do
 		if entity.name == "blueprint-note-interface" then
 			local note = cache.blueprint[entity.control_behavior.filters[1].count] -- get cached note using the saved unit number from interface
