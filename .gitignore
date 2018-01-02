@@ -42,5 +42,3 @@ luac.out
 attach-notes/mod-list.json
 *.pdn
 attach-notes/mod-settings.json
-
-.github/
