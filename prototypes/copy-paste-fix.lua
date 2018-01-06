@@ -21,13 +21,7 @@ local function addPastableEntities(tbl)
 		if entities then
 			for _,entity in pairs(entities) do
 				entity.allow_copy_paste = true
-				if type(entity.additional_pastable_entities) == "string" then
-					entity.additional_pastable_entities = util.concat({entity.additional_pastable_entities}, pastableEntities)
-				elseif type(entity.additional_pastable_entities) == "table" then
-					entity.additional_pastable_entities = util.concat(entity.additional_pastable_entities, pastableEntities)
-				else
-					entity.additional_pastable_entities = util.shallowCopy(pastableEntities)
-				end
+				entity.additional_pastable_entities = util.concat(entity.additional_pastable_entities, pastableEntities)
 			end
 		end
 	end

@@ -349,7 +349,7 @@ this.templates.noteWindow = {
 					type = "drop-down",
 					name = "font",
 					style = "font_settings_style",
-					items = util.concat{{{"attach-notes-gui.select-font"}}, util.localize(tables.fonts, "fonts")},
+					items = util.concat({{"attach-notes-gui.select-font"}}, util.localize(tables.fonts, "fonts")),
 					onCreated = function (self, data)
 						local textBox, note = self.parent.parent["note-text"], data.bp.note -- update text box font
 						if note and note.font then

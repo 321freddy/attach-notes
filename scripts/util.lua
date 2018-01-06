@@ -118,11 +118,33 @@ function util.getColorOrDefault(name, settings, note, replacements)
 	return tables.colorFromName[(replacements and replacements[color]) or color]
 end
 
-function util.shallowCopy(original) -- Creates a shallow copy of a table
-    copy = {}
-    for key,value in pairs(original) do copy[key] = value  end
+function util.shallowCopy(orig)
+    local copy
+    if type(orig) == 'table' then
+        copy = {}
+        for orig_key, orig_value in pairs(orig) do
+            copy[orig_key] = orig_value
+        end
+    else -- number, string, boolean, etc
+        copy = orig
+    end
     return copy
 end
+
+function util.deepCopy(orig)
+    local copy
+    if type(orig) == 'table' then
+        copy = {}
+        for orig_key, orig_value in next, orig, nil do
+            copy[deepcopy(orig_key)] = deepcopy(orig_value)
+        end
+        setmetatable(copy, deepcopy(getmetatable(orig)))
+    else -- number, string, boolean, etc
+        copy = orig
+    end
+    return copy
+end
+
 
 function util.countTable(tbl)
 	local count = 0
@@ -131,7 +153,7 @@ function util.countTable(tbl)
 end
 
 function util.isEmpty(tbl)
-	return next(tbl) == nil
+	return type(tbl) ~= "table" or next(tbl) == nil
 end
 
 function util.findInTable(tbl, func)
@@ -140,13 +162,19 @@ function util.findInTable(tbl, func)
 	end
 end
 
-function util.concat(arrays)
+function util.concat(...)
 	local result, lastIndex = {}, 0
-	for _,arr in ipairs(arrays) do
-		for index,value in ipairs(arr) do
-			result[lastIndex + index] = value
+	for _,val in pairs({...}) do
+	
+		if type(val) == "table" then
+			for index,value in pairs(val) do
+				result[lastIndex + index] = value
+			end
+			lastIndex = lastIndex + #val
+		elseif val ~= nil then
+			result[lastIndex + 1] = val
+			lastIndex = lastIndex + 1
 		end
-		lastIndex = lastIndex + #arr
 	end
 	return result
 end
