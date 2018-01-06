@@ -7,5 +7,5 @@
   "contact": "",
   "homepage": "",
   "description": "Attach notes to blueprints/books, combinators, entities... almost everything + Adds signposts. All notes are saved when you export a blueprint as a string (but you need the mod to read them).",
-  "dependencies": ["base >= 0.16.0"]
+  "dependencies": ["base >= 0.16.0", "?Flare Stack"]
 }
