@@ -284,14 +284,12 @@ function this.filterStorages(stack) -- filter out note storages if their entity 
 	
 		if pair.other then 
 			for _,other in ipairs(pair.other) do
-				other.entity_number = #result + 1
-				result[other.entity_number] = other
+				result[#result + 1] = other
 			end
 			
 			local storage = pair.storage
 			if storage then 
-				storage.entity_number = #result + 1
-				result[storage.entity_number] = storage
+				result[#result + 1] = storage
 			end
 		end
 	end
