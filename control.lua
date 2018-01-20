@@ -10,9 +10,12 @@ local function formatLuaObject(v, handler)
 			
 				-- Format LuaObjects nicely
 				local help = v.help()
-				local l = help:find("[\r\n]label %[RW?%]") and v.label or nil
-				local n = help:find("[\r\n]name %[RW?%]") and v.name or nil
+				local objType = help:gsub("^Help for (%w+):.*$", "%1")
+				if objType == "LuaItemStack" and not v.valid_for_read then return objType.."<EMPTY>" end
+				
 				local t = help:find("[\r\n]type %[RW?%]") and v.type or nil
+				local n = help:find("[\r\n]name %[RW?%]") and v.name or nil
+				local l = help:find("[\r\n]label %[RW?%]") and v.label or nil
 				local id = l and "'"..l.."'" or ""
 				if l and n then id = id.." : " end
 				id = id..(n or "")
@@ -21,7 +24,7 @@ local function formatLuaObject(v, handler)
 					id = id..(t or "")
 				end
 				
-				return help:gsub("^Help for (%w+):.*$", "%1").."<"..id..">"
+				return objType.."<"..id..">"
 			else
 				-- No help function exists?
 				return serpent.line(v)
