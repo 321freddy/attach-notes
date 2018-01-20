@@ -229,6 +229,7 @@ function this.on_player_setup_blueprint(event)
 	local player = game.players[event.player_index]
 	local cache = global.cache[event.player_index]
 	local cursorStack = player.cursor_stack
+	local bpToSetup = player.blueprint_to_setup
 	local notes = global.notes
 	
 	cache.blueprint = {} -- save attached notes to players cache
@@ -239,7 +240,9 @@ function this.on_player_setup_blueprint(event)
 		cache.blueprint[unitNumber] = notes[unitNumber]
 	end
 	
-	if event.alt and cursorStack.valid_for_read then
+	if bpToSetup.valid_for_read then
+		this.convertBlueprint(player, cache, bpToSetup)
+	elseif event.alt and cursorStack.valid_for_read then
 		this.convertBlueprint(player, cache, cursorStack)
 	end
 end
@@ -297,8 +300,8 @@ function this.filterStorages(stack) -- filter out note storages if their entity 
 	stack.set_blueprint_entities(result)
 end
 
-function this.convertBlueprint(player, cache, cursorStack) -- replace note interfaces of a blueprint with actual note storages
-	local entities = cursorStack.get_blueprint_entities() or {}
+function this.convertBlueprint(player, cache, stack) -- replace note interfaces of a blueprint with actual note storages
+	local entities = stack.get_blueprint_entities() or {}
 	for _,entity in ipairs(entities) do
 		if entity.name == "blueprint-note-interface" then
 			local note = cache.blueprint[entity.control_behavior.filters[1].count] -- get cached note using the saved unit number from interface
@@ -309,9 +312,8 @@ function this.convertBlueprint(player, cache, cursorStack) -- replace note inter
 			end
 		end
 	end
-	cursorStack.set_blueprint_entities(entities)
 	
-	--dlog("cursor stack: "..cursorStack.name..", bp: "..serpent.line(cursorStack.get_blueprint_entities()))
+	stack.set_blueprint_entities(entities)
 	cache.blueprint = nil
 end
 
