@@ -11,8 +11,11 @@ function this.on_gui_opened(event)
 	local index = event.player_index
 	local player = game.players[index]
 	local cache = global.cache[index]
-	local stack = event.item or (cache.editBlueprintGui and cache.editBlueprintGui.inner)
+	local stack = event.item or (cache.editBlueprintGui and cache.editBlueprintGui.inner) or player.blueprint_to_setup
 	if cache.editBlueprintGui then cache.editBlueprintGui.init = false end
+	
+	-- ignore this event when the note of the player.blueprint_to_setup changed
+	if cache.openedBlueprintGui and cache.openedBlueprintGui.ignoreGUIRebuild then return end
 	
 	if util.supportsBpNote(stack) then
 		if this.openedBpDiffers(cache, stack) then
@@ -33,6 +36,9 @@ function this.on_gui_closed(event)
 	local index = event.player_index
 	local player = game.players[index]
 	local cache = global.cache[index]
+	
+	-- ignore this event when the note of the player.blueprint_to_setup changed
+	if cache.openedBlueprintGui and cache.openedBlueprintGui.ignoreGUIRebuild then return end
 	
 	-- editor of blueprint/book has been closed? (only applies to editor opened via edit button/hotkey)
 	if cache.editBlueprintGui and not cache.editBlueprintGui.init and event.gui_type == defines.gui_type.item then 
@@ -129,10 +135,16 @@ end
 
 function this.openedBpDiffers(cache, from)
 	if cache.openedBlueprintGui then
-		return cache.openedBlueprintGui.stack ~= from
-	else
-		return true
+		local stack = cache.openedBlueprintGui.stack
+		
+		if stack and from and stack.item_number ~= nil then
+			return stack.item_number ~= from.item_number 
+		end
+		
+		return stack ~= from
 	end
+	
+	return true
 end
 
 function this.editSelectedBp(event) -- edit blueprint button and hotkey
@@ -176,7 +188,7 @@ function this.updateOpenedBp(player, bp)
 	if doUpdate then edit.stackID = id end -- update edit stackID if it changed
 	
 	bp.stack.allow_manual_label_change = false
-	player.opened = bp.stack
+	if not util.isValidStack(player.blueprint_to_setup) then player.opened = bp.stack end
 end
 
 function this.getIcon(icons, index)
@@ -265,12 +277,14 @@ function this.encodeBlueprint(bp, stack) -- encode blueprint note to an item sta
 		}
 	end
 	
-	stack.set_blueprint_entities(bp.entities)
-	stack.set_blueprint_tiles(bp.tiles)
-	stack.label = note.label or ""
-	stack.label_color = util.getColorOrDefault("label", nil, note, {black = "white"})
-	stack.allow_manual_label_change = note.allowLabelChange
-	stack.blueprint_icons = note.icons
+	bp.ignoreGUIRebuild = true
+		stack.set_blueprint_entities(bp.entities)
+		stack.set_blueprint_tiles(bp.tiles)
+		stack.label = note.label or ""
+		stack.label_color = util.getColorOrDefault("label", nil, note, {black = "white"})
+		stack.allow_manual_label_change = note.allowLabelChange
+		stack.blueprint_icons = note.icons
+	bp.ignoreGUIRebuild = false
 	
 	note.icons = stack.blueprint_icons
 	bp.stackID = stack.item_number

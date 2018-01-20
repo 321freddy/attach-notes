@@ -67,6 +67,9 @@ function util.iterateInvs(player, func) -- iterate over all ItemStacks of this p
 	local stack = player.cursor_stack
 	if util.isValidStack(stack) and func(stack) then return true end
 
+	stack = player.blueprint_to_setup
+	if util.isValidStack(stack) and func(stack) then return true end
+	
 	for _,invIndex in pairs(defines.inventory) do
 		local inv = player.get_inventory(invIndex)
 		if util.isValid(inv) and not inv.is_empty() then
