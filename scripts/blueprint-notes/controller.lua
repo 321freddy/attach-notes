@@ -255,7 +255,7 @@ function this.destroyGUI(player, cache)
 	cache.openedBlueprintGui = nil
 end
 
-function this.encodeBlueprint(bp, stack) -- encode blueprint note to an item stack (returns item number encoded stack)
+function this.encodeBlueprint(bp, stack) -- encode blueprint note to an item stack (returns item number of encoded stack)
 	local success = stack.set_stack{ name = bp.name }
 	if not success then return false end
 	local note = bp.note
