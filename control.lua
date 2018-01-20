@@ -53,7 +53,7 @@ end
 function dlog(...) -- Print debug message
 	local tick = 0
 	if game then tick = game.tick end
-	local msg = tick.." [BPT]"
+	local msg = tick.." [AN]"
 	
 	for key,val in pairs({...}) do
 		if type(val) == "table" then
