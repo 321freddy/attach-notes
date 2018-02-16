@@ -81,7 +81,7 @@ data:extend{
 		vehicle_impact_sound =  { filename = "__base__/sound/car-metal-impact.ogg", volume = 0.65 },
 		fluid_box =
 		{
-		  base_area = 0,
+		  base_area = 0.0000001,
 		  pipe_connections = {}
 		},
 		window_bounding_box = {{0, 0}, {0, 0}},
