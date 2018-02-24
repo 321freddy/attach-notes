@@ -202,24 +202,6 @@ end
 
 this.on_edit_blueprint = this.editSelectedBp
 
-function this.on_tick() -- update blueprint preview incase bp book active index changed
-	util.doEvery(15, this.updatePreview)
-end
-
-function this.updatePreview()
-	for index,player in pairs(game.players) do
-		if util.isValidPlayer(player) and player.connected then
-			local cache = global.cache[index]
-			local stack = player.cursor_stack
-			
-			if stack.is_blueprint_book and cache.activeIndex ~= stack.active_index then
-				this.buildPreviewGUI(player, cache)
-				cache.activeIndex = stack.active_index
-			end
-		end
-	end
-end
-
 function this.buildPreviewGUI(player, cache)
 	if not util.isValidPlayer(player) then return end
 
