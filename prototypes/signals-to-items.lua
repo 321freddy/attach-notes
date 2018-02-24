@@ -5,6 +5,8 @@ local function convertToItem(signal)
 	item.type = "item"
 	item.flags = { "hidden" }
 	item.stack_size = 1
+	item.fuel_category = nil
+	item.fuel_value = nil
 	return item
 end
 
