@@ -1,7 +1,7 @@
 local util = require("scripts.util")
 
 local function convertToItem(signal)
-	local item = util.shallowCopy(signal)
+	local item = util.deepCopy(signal)
 	item.type = "item"
 	item.flags = { "hidden" }
 	item.stack_size = 1
