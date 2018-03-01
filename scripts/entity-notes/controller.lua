@@ -265,34 +265,37 @@ function this.filterStorages(stack) -- filter out note storages if their entity 
 	if not stack.is_blueprint or not stack.is_blueprint_setup() then return end
 	
 	local entities = stack.get_blueprint_entities()
-	local notePairs = {}
-	
-	for _,entity in pairs(entities) do
-		local pos = entity.position
-		local key = pos.x..";"..pos.y
-		notePairs[key] = notePairs[key] or {}
-		local ref = notePairs[key]
-		
-		if entity.name == "blueprint-note-storage" or 
-		   entity.name == "blueprint-note-interface" then
-			ref.storage = entity
-		else
-			ref.other = ref.other or {}
-			ref.other[#ref.other + 1] = entity
-		end
-	end
-	
 	local result = {}
-	for _,pair in pairs(notePairs) do
 	
-		if pair.other then 
-			for _,other in ipairs(pair.other) do
-				result[#result + 1] = other
-			end
+	if entities then
+		local notePairs = {}
+		for _,entity in pairs(entities) do
+			local pos = entity.position
+			local key = pos.x..";"..pos.y
+			notePairs[key] = notePairs[key] or {}
+			local ref = notePairs[key]
 			
-			local storage = pair.storage
-			if storage then 
-				result[#result + 1] = storage
+			if entity.name == "blueprint-note-storage" or 
+			   entity.name == "blueprint-note-interface" then
+				ref.storage = entity
+			else
+				ref.other = ref.other or {}
+				ref.other[#ref.other + 1] = entity
+			end
+		end
+		
+		
+		for _,pair in pairs(notePairs) do
+		
+			if pair.other then 
+				for _,other in ipairs(pair.other) do
+					result[#result + 1] = other
+				end
+				
+				local storage = pair.storage
+				if storage then 
+					result[#result + 1] = storage
+				end
 			end
 		end
 	end
