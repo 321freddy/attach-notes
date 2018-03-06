@@ -130,6 +130,7 @@ local function createSlotIcon(index)
 		onCreated = function(self, data)
 			local note = data.bp.note
 			local style = self.style
+			self.ignored_by_interaction = true
 			
 			if note and note.icons[index] then 
 				-- load the correct icon sprite
