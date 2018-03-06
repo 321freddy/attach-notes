@@ -138,10 +138,10 @@ function util.deepCopy(orig)
     local copy
     if type(orig) == 'table' then
         copy = {}
-        for orig_key, orig_value in next, orig, nil do
-            copy[util.deepCopy(orig_key)] = util.deepCopy(orig_value)
+        for orig_key, orig_value in pairs(orig) do
+            copy[orig_key] = util.deepCopy(orig_value)
         end
-        setmetatable(copy, util.deepCopy(getmetatable(orig)))
+        --setmetatable(copy, util.deepCopy(getmetatable(orig)))
     else -- number, string, boolean, etc
         copy = orig
     end
