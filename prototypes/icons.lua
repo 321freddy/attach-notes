@@ -71,7 +71,7 @@ generateIcon("fuel", "symbols")
 generateIcon("trash", "symbols")
 
 generateIcon("tree", "nature")
-generateIcon("bush", "nature", "__base__/graphics/decorative/garballo/garballo-06.png", nil, 31)
+generateIcon("bush", "nature")
 generateIcon("biter", "nature", nil, nil, 64)
 
 generateIcon("small-biter", "biters", "__base__/graphics/icons/small-biter.png", true)
