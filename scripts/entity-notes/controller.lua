@@ -9,8 +9,7 @@ local templates = scripts["entity-notes.gui-templates"].templates
 local rebuildGuiOnSetting = {
 	["default-font"] = true,
 	["default-text-color"] = true,
-	["default-title-color"] = true,
-	["opactiy"] = true
+	["default-title-color"] = true
 }
 
 function this.on_gui_opened(event)

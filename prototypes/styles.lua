@@ -14,46 +14,40 @@ local empty = {
 	}
 }
 
-local function generateTextBoxStyles(opacity)
-	data.raw["gui-style"].default["entity_note_style_op"..opacity..'%'] =
+data.raw["gui-style"].default["entity_note_style"] =
+{
+	type = "textbox_style",
+	parent = "textbox",
+	width = 265,
+	height = 330,
+	graphical_set =
 	{
-		type = "textbox_style",
-		parent = "textbox",
-		width = 265,
-		height = 330,
-		graphical_set =
-		{
-			type = "composition",
-			filename = "__core__/graphics/gui.png",
-			priority = "extra-high-no-scale",
-			corner_size = {3, 3},
-			position = {16, 0},
-			opacity = opacity / 100
-		},
-	}
+		type = "composition",
+		filename = "__core__/graphics/gui.png",
+		priority = "extra-high-no-scale",
+		corner_size = {3, 3},
+		position = {16, 0},
+		opacity = 0.5
+	},
+}
+
+data.raw["gui-style"].default["entity_title_style"] =
+{
+	type = "textfield_style",
+	parent = "textfield",
+	width = 237,
+	font = "default-large-bold",
+	graphical_set =
+	{
+		type = "composition",
+		filename = "__core__/graphics/gui.png",
+		priority = "extra-high-no-scale",
+		corner_size = {3, 3},
+		position = {16, 0},
+		opacity = 0.5
+	},
+}
 	
-	data.raw["gui-style"].default["entity_title_style_op"..opacity..'%'] =
-	{
-		type = "textfield_style",
-		parent = "textfield",
-		width = 237,
-		font = "default-large-bold",
-		graphical_set =
-		{
-			type = "composition",
-			filename = "__core__/graphics/gui.png",
-			priority = "extra-high-no-scale",
-			corner_size = {3, 3},
-			position = {16, 0},
-			opacity = opacity / 100
-		},
-	}
-end
-
-for opacity = 10, 100, 10 do
-	generateTextBoxStyles(opacity)
-end
-
 data:extend{
 	{
 		type = "font",

@@ -1,13 +1,5 @@
 local tables = require("tables")
 
-local function getOpacityPercentages()
-	local tbl = {}
-	for opacity = 100, 10, -10 do
-		tbl[#tbl + 1] = opacity..'%'
-	end
-	return tbl
-end
-
 data:extend{
 	{
 		type = "bool-setting",
@@ -50,14 +42,6 @@ data:extend{
 		setting_type = "runtime-per-user",
 		order = "ae",
 		default_value = false
-	},
-	{
-		type = "string-setting",
-		name = "opacity",
-		setting_type = "runtime-per-user",
-		order = "b",
-		default_value = '70%',
-		allowed_values = getOpacityPercentages()
 	},
 	{
 		type = "string-setting",

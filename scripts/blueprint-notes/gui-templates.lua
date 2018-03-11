@@ -286,7 +286,7 @@ this.templates.noteWindow = {
 										if note and note.label then self.text = note.label end
 										
 										self.tooltip = { "tooltips.label" }
-										self.style = "entity_title_style_op"..data.settings.opacity.value
+										self.style = "entity_title_style"
 										self.style.font_color = util.getColorOrDefault("label", data.settings, note)
 										self.style.width = 4 * 40 + 29
 									end,
@@ -334,7 +334,7 @@ this.templates.noteWindow = {
 			onCreated = function (self, data)
 				local note = data.bp.note
 				if note and note.text then self.text = note.text end
-				self.style = "entity_note_style_op"..data.settings.opacity.value
+				self.style = "entity_note_style"
 				self.style.font_color = util.getColorOrDefault("text", data.settings, note)
 			end,
 			onChanged = function (event, index, player, cache, bp)

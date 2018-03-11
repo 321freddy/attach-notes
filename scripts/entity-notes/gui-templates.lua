@@ -336,7 +336,7 @@ this.templates.noteWindow = {
 						end
 						
 						self.tooltip = { "tooltips.title" }
-						self.style = "entity_title_style_op"..data.settings.opacity.value
+						self.style = "entity_title_style"
 						self.style.font_color = util.getColorOrDefault("title", data.settings, note)
 						
 						if util.isValid(self.parent["icon-chooser"]) then -- shorten width if necessary
@@ -371,7 +371,7 @@ this.templates.noteWindow = {
 			onCreated = function (self, data)
 				local note = data.note
 				if note and note.text then self.text = note.text end
-				self.style = "entity_note_style_op"..data.settings.opacity.value
+				self.style = "entity_note_style"
 				self.style.font_color = util.getColorOrDefault("text", data.settings, note)
 			end,
 			onChanged = function (event, index, player, cache, entity, note)
