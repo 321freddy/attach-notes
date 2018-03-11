@@ -44,10 +44,10 @@ tables.disableTitle = {
 }
 
 tables.alwaysAttachNote = {
-	["decider-combinator"] = true,
-	["arithmetic-combinator"] = true,
-	["constant-combinator"] = true,
-	["programmable-speaker"] = true,
+	--["decider-combinator"] = true,
+	--["arithmetic-combinator"] = true,
+	--["constant-combinator"] = true,
+	--["programmable-speaker"] = true,
 	["signpost"] = true,
 }
 
@@ -82,6 +82,10 @@ tables.offerAttachNote = {
 	["car"] = true,
 	["ammo-turret"] = true,
 	["artillery-turret"] = true,
+	["decider-combinator"] = true,
+	["arithmetic-combinator"] = true,
+	["constant-combinator"] = true,
+	["programmable-speaker"] = true,
 }
 
 tables.markerOffsets = {

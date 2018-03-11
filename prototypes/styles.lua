@@ -189,5 +189,6 @@ local function addButtonStyle(name, x, y)
 end
 
 addButtonStyle("add", 64)
-addButtonStyle("remove", 64, 32)
+addButtonStyle("delete", 64, 32)
 addButtonStyle("edit", 160)
+addButtonStyle("view", 160, 32)

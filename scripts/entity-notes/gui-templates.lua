@@ -12,11 +12,11 @@ this.templates.attachNoteButton = {
 	name = "attach-note-button",
 	onCreated = function (self, data)
 		if data.attached then
-			--self.caption = {"attach-notes-gui.delete-note"}
-			self.style = "attach-notes-remove-button"
-			self.tooltip = { "tooltips.delete-note" }
+			-- Show "show note" button
+			self.style = "attach-notes-view-button"
+			self.tooltip = { "tooltips.view-note" }
 		else
-			--self.caption = {"attach-notes-gui.attach-note"}
+			-- Show "add note" button
 			self.style = "attach-notes-add-button"
 			self.tooltip = { "tooltips.attach-note", data.opened.localised_name }
 		end
@@ -26,23 +26,27 @@ this.templates.attachNoteButton = {
 	end,
 	onClicked = function (event)
 		local player = event.element.gui.player
+		local settings = player.mod_settings
 		local opened = player.opened
 		local notes = global.notes
+		local cache = global.cache[player.index]
 		
-		if notes[opened] then -- toggle note
-			for name in pairs(components) do util.destroyIfValid(notes[opened][name]) end
-			notes[opened] = nil
+		if notes[opened] then
+		
+			cache.noteIsHidden = not cache.noteIsHidden -- toggle hidden state if note is present
 		else
-			notes[opened] = {}
+			notes[opened] = {} -- create new note if no note is present
 			
 			local note = notes[opened]
 			local setting = player.mod_settings["show-marker-by-default"].value
 			if setting and not components.marker.isDisabledForEntity(opened) then -- create marker if necessary
 				if not util.isValid(note.marker) then note.marker = components.marker.create(opened) end
 			end
+			
+			cache.noteIsHidden = false
 		end
 		
-		controller.buildGUI(player, global.cache[event.player_index]) -- rebuild gui
+		controller.buildGUI(player, cache) -- rebuild gui
 		opened.last_user = player
 	end
 }
@@ -248,10 +252,53 @@ this.templates.noteWindow = {
 	type = "frame",
 	name = "note-window",
 	direction = "vertical",
-	onCreated = function (self, data)
-		self.caption = data.opened.localised_name
-	end,
 	children = {
+		createSettingsFlow{
+			name = "frame-header",
+			children = {
+				{
+					type = "label",
+					name = "frame-caption",
+					onCreated = function (self, data)
+						self.caption = data.opened.localised_name
+						local style = self.style
+						style.bottom_padding = 5
+						style.font = "default-frame"
+					end,
+				},
+				{
+					type = "sprite-button", -- invisible
+					name = "spacer",
+					style = "icon_style",
+					onCreated = function (self, data)
+						self.enabled = false
+						self.style.horizontally_stretchable = true
+						self.style.horizontally_squashable = true
+					end,
+				},
+				createNoteGuiElement{
+					type = "sprite-button",
+					name = "delete",
+					style = "attach-notes-delete-button",
+					caption = "",
+					onCreated = function (self, data)
+						self.tooltip = { "tooltips.delete-note" }
+					
+						local style = self.style
+						style.width = 32
+						style.height = 32
+						style.top_padding = 0
+						style.bottom_padding = 0
+						style.font = "default-bold"
+					end,
+					onChanged = function (event, index, player, cache, entity, note) -- delete note
+						for name in pairs(components) do util.destroyIfValid(note[name]) end
+						global.notes[entity] = nil
+						controller.buildGUI(player, cache)
+					end,
+				},
+			},
+		},
 		createSettingsFlow{
 			name = "tag",
 			children = {

@@ -25,7 +25,8 @@ function this.on_gui_opened(event)
 	
 	if event.gui_type == defines.gui_type.entity and util.isValid(event.entity) then
 		if cache.openedEntityGui ~= event.entity then
-			this.destroyPreviewGUI(player) -- destroy preview window
+			cache.noteIsHidden = player.mod_settings["hide-note-by-default"].value -- read hidden by default setting
+		
 			this.buildGUI(player, cache) -- create edit window
 		end
 		
@@ -40,7 +41,6 @@ function this.on_gui_closed(event)
 	local cache = global.cache[index]
 
 	this.destroyGUI(player, cache)
-	this.buildPreviewGUI(player, cache) -- show note preview if entity is still selected
 	
 	local stack = event.item
 	if util.isValidStack(stack) then this.filterStorages(stack) end
@@ -60,7 +60,7 @@ function this.buildPreviewGUI(player, cache)
 	
 	local selected = player.selected
 	
-	if util.isValid(selected) and cache.openedEntityGui ~= selected then
+	if util.isValid(selected) and (cache.openedEntityGui ~= selected or cache.noteIsHidden) then
 		local note = global.notes[selected]
 		if note then
 			gui.create(player, templates.notePreview, { note = note, settings = player.mod_settings, selected = selected })
@@ -80,13 +80,15 @@ function this.buildGUI(player, cache)
 		local note = global.notes[opened]
 		
 		if tables.offerAttachNote[opened.type] and not tables.alwaysAttachNote[opened.name] then -- create attach/delete note button if needed
-			gui.create(player, templates.attachNoteButton, { attached = (note ~= nil), opened = opened })
+			gui.create(player, templates.attachNoteButton, { attached = (note ~= nil), settings = player.mod_settings, opened = opened, cache = cache })
 		end
 		
-		if note or tables.alwaysAttachNote[opened.type] or tables.alwaysAttachNote[opened.name] then
+		if tables.alwaysAttachNote[opened.type] or tables.alwaysAttachNote[opened.name] or (note and not cache.noteIsHidden) then
 			gui.create(player, templates.noteWindow, { note = note, settings = player.mod_settings, opened = opened })
 		end
+		
 		cache.openedEntityGui = opened
+		this.buildPreviewGUI(player, cache)
 	end
 end
 
@@ -94,6 +96,7 @@ function this.destroyGUI(player, cache)
 	gui.destroy(player, templates.attachNoteButton)
 	gui.destroy(player, templates.noteWindow)
 	cache.openedEntityGui = nil
+	this.buildPreviewGUI(player, cache) -- show note preview if entity is still selected
 end
 
 function this.on_runtime_mod_setting_changed(event)

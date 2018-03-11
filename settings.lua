@@ -18,6 +18,13 @@ data:extend{
 	},
 	{
 		type = "bool-setting",
+		name = "hide-note-by-default",
+		setting_type = "runtime-per-user",
+		order = "aa",
+		default_value = false
+	},
+	{
+		type = "bool-setting",
 		name = "copy-paste-attached-notes",
 		setting_type = "runtime-per-user",
 		order = "ab",
