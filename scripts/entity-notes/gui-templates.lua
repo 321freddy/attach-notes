@@ -494,7 +494,7 @@ this.templates.notePreview = {
 						
 						self.tooltip = { "tooltips.title" }
 						self.style.font = "default-large-bold"
-						self.style.font_color = util.getColorOrDefault("title", data.settings, note, {black = "white"})
+						self.style.font_color = util.getColorOrDefault("title", data.settings, note) --{black = "white"}
 						self.style.single_line = true
 					end,
 				},
@@ -508,7 +508,7 @@ this.templates.notePreview = {
 			onCreated = function (self, data)
 				local note = data.note
 				if note and note.text then self.caption = util.fullTrim(note.text) end
-				self.style.font_color = util.getColorOrDefault("text", data.settings, note, {black = "white"})
+				self.style.font_color = util.getColorOrDefault("text", data.settings, note) --{black = "white"}
 				
 				local note = data.note -- update text box font
 				if note and note.font then

@@ -263,7 +263,7 @@ function this.encodeBlueprint(bp, stack) -- encode blueprint note to an item sta
 		stack.set_blueprint_entities(bp.entities)
 		stack.set_blueprint_tiles(bp.tiles)
 		stack.label = note.label or ""
-		stack.label_color = util.getColorOrDefault("label", nil, note, {black = "white"})
+		stack.label_color = util.getColorOrDefault("label", nil, note) --{black = "white"}
 		stack.allow_manual_label_change = note.allowLabelChange
 		stack.blueprint_icons = note.icons
 	bp.ignoreGUIRebuild = false

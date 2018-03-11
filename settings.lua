@@ -72,7 +72,7 @@ data:extend{
 		name = "default-text-color",
 		setting_type = "runtime-per-user",
 		order = "bb",
-		default_value = tables.colors[1],
+		default_value = tables.colors[2],
 		allowed_values = tables.colors
 	},
 	{
@@ -80,7 +80,7 @@ data:extend{
 		name = "default-title-color",
 		setting_type = "runtime-per-user",
 		order = "bc",
-		default_value = tables.colors[1],
+		default_value = tables.colors[2],
 		allowed_values = tables.colors
 	},
 	{

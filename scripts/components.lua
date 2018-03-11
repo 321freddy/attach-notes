@@ -93,7 +93,7 @@ components.flyingText = {
 			position = { x = pos.x + offset.x, y = pos.y + offset.y },
 			force = entity.force,
 			text = title,
-			color = util.getColorOrDefault("title", player and player.mod_settings, note, {black = "white"})
+			color = util.getColorOrDefault("title", player and player.mod_settings, note) --{black = "white"}
 		}
 		
 		created.active = false
@@ -102,7 +102,7 @@ components.flyingText = {
 	update = function (entity, note, player)
 		if util.isValid(note.flyingText) then
 			note.flyingText.text = util.fullTrim(note.title) or " "
-			note.flyingText.color = util.getColorOrDefault("title", player and player.mod_settings, note, {black = "white"})
+			note.flyingText.color = util.getColorOrDefault("title", player and player.mod_settings, note) --{black = "white"}
 		end
 	end,
 	isDisabledForEntity = function (entity)
