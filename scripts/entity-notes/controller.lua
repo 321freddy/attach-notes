@@ -74,18 +74,20 @@ end
 
 function this.buildGUI(player, cache)
 	this.destroyGUI(player, cache)
-	
 	local opened = player.opened
-	local note = global.notes[opened]
 	
-	if tables.offerAttachNote[opened.type] and not tables.alwaysAttachNote[opened.name] then -- create attach/delete note button if needed
-		gui.create(player, templates.attachNoteButton, { attached = (note ~= nil), opened = opened })
+	if util.isValid(opened) then
+		local note = global.notes[opened]
+		
+		if tables.offerAttachNote[opened.type] and not tables.alwaysAttachNote[opened.name] then -- create attach/delete note button if needed
+			gui.create(player, templates.attachNoteButton, { attached = (note ~= nil), opened = opened })
+		end
+		
+		if note or tables.alwaysAttachNote[opened.type] or tables.alwaysAttachNote[opened.name] then
+			gui.create(player, templates.noteWindow, { note = note, settings = player.mod_settings, opened = opened })
+		end
+		cache.openedEntityGui = opened
 	end
-	
-	if note or tables.alwaysAttachNote[opened.type] or tables.alwaysAttachNote[opened.name] then
-		gui.create(player, templates.noteWindow, { note = note, settings = player.mod_settings, opened = opened })
-	end
-	cache.openedEntityGui = opened
 end
 
 function this.destroyGUI(player, cache)
