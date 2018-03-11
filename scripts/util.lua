@@ -115,7 +115,7 @@ function util.getColorOrDefault(name, settings, note, replacements)
 		color = tables.colors[saved]
 	elseif settings then
 		if name == "label" then name = "title" end
-		color = settings["default-"..name.."-color"].value
+		color = settings["default-"..name.."-color2"].value
 	end
 	
 	return tables.colorFromName[(replacements and replacements[color]) or color]

@@ -53,7 +53,7 @@ data:extend{
 	},
 	{
 		type = "string-setting",
-		name = "default-text-color",
+		name = "default-text-color2",
 		setting_type = "runtime-per-user",
 		order = "bb",
 		default_value = tables.colors[2],
@@ -61,7 +61,7 @@ data:extend{
 	},
 	{
 		type = "string-setting",
-		name = "default-title-color",
+		name = "default-title-color2",
 		setting_type = "runtime-per-user",
 		order = "bc",
 		default_value = tables.colors[2],
