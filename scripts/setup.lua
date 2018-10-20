@@ -88,8 +88,13 @@ function setup.on_init()
 											 onClicked = {},
 											 onElementChanged = {},
 											 onSelectionStateChanged = {},
-											 onTextChanged = {} }
+											 onTextChanged = {},
+											 onValueChanged = {} }
+											 
+	-- Migration to version 0.2.2
+	global.guiEvents.onValueChanged = global.guiEvents.onValueChanged or {}
 	
+	-- Create player caches
 	for player_index,_ in pairs(game.players) do
 		setup.createPlayerCache(player_index)
 	end
