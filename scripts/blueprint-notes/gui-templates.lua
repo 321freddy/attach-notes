@@ -241,7 +241,8 @@ local function createIconChooser(btnIndex, getTarget)
 			local rebuild = table_size(note.icons) == 0
 			controller.updateOpenedBp(player, bp) -- update vanilla blueprint gui (+ reorder icons)
 			
-			if rebuild then -- icon choosers need update
+			
+			if rebuild or not util.isValid(self) then -- icon choosers need update
 				controller.buildGUI(player, cache) -- rebuild entire gui
 			else
 				gui.on_gui_click{ -- update blueprint slot button icons
