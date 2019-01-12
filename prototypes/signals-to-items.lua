@@ -16,9 +16,9 @@ local function convertToItem(signal, type)
 end
 
 for _,signal in pairs(data.raw["virtual-signal"]) do
-	if not signal.special_signal then data:extend{ convertToItem(signal, "virtual-signal") } end
+	if not signal.special_signal and not data.raw.item[signal.name] then data:extend{ convertToItem(signal, "virtual-signal") } end
 end
 
 for _,fluid in pairs(data.raw["fluid"]) do
-	data:extend{ convertToItem(fluid, "fluid") }
+	if not data.raw.item[fluid.name] then data:extend{ convertToItem(fluid, "fluid") } end
 end
