@@ -362,7 +362,7 @@ function this.on_built_entity(event)
 	local entity = event.created_entity
 	local notes = global.notes
 	
-	if entity.name == "entity-ghost" then -- handle blueprint placement
+	if entity.name == "entity-ghost" or entity.name == "tile-ghost" then -- handle blueprint placement
 		if entity.ghost_name == "blueprint-note-storage" then
 			--dlog("built ghost storage at "..serpent.line(entity.position)..", un: "..entity.unit_number)
 			local ghosts = entity.surface.find_entities_filtered{
