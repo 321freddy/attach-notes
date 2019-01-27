@@ -36,17 +36,25 @@ function this.on_gui_closed(event)
 	local index = event.player_index
 	local player = game.players[index]
 	local cache = global.cache[index]
-	
+	local cursorStack = player.cursor_stack
+
 	-- ignore this event when the note of the player.blueprint_to_setup changed
 	if cache.openedBlueprintGui and cache.openedBlueprintGui.ignoreGUIRebuild then return end
 	
+	-- remove blueprint label if initial setup was cancelled
+	if util.isEmptyBp(cursorStack) then
+		cursorStack.clear_blueprint()
+		cursorStack.label = ""
+		cursorStack.label_color = tables.colorFromName.white
+		cursorStack.allow_manual_label_change = true
+	end
+
 	-- editor of blueprint/book has been closed? (only applies to editor opened via edit button/hotkey)
 	if cache.editBlueprintGui and not cache.editBlueprintGui.init and event.gui_type == defines.gui_type.item then 
 	
 		if not cleanBPsFeatureActive(player) then
 			this.updateBlueprintRef(player, cache, "editBlueprintGui")
 			
-			local cursorStack = player.cursor_stack
 			local stack = cache.editBlueprintGui and cache.editBlueprintGui.stack
 			
 			if not cursorStack.valid_for_read and util.isValidStack(stack) then  -- reselect the stack

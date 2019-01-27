@@ -106,6 +106,10 @@ function util.supportsBpNote(stack)
 	return util.isValidStack(stack) and stack.is_blueprint and stack.is_blueprint_setup() and not isTemporaryBp(player, stack) -- or stack.is_blueprint_book
 end	
 
+function util.isEmptyBp(stack)
+	return util.isValidStack(stack) and stack.is_blueprint and not stack.is_blueprint_setup() 
+end
+
 function util.getColorOrDefault(name, settings, note, replacements)
 	local color = "white" --"black"
 	
