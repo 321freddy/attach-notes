@@ -244,7 +244,7 @@ local function createSettingsFlow(data)
 				self.style.horizontally_stretchable = true
 			end
 
-			if data.onCreated then data.onCreated(self, onCreatedData) end
+			if data.onCreated and self and self.valid then data.onCreated(self, onCreatedData) end
 		end,
 		children = data.children
 	}
