@@ -1,6 +1,6 @@
 -- Makes notes pastable to any entity that can have one
 
-local tables = require("tables")
+local config = require("config")
 local util = require("scripts.util")
 local pastableEntities = {}
 
@@ -27,8 +27,8 @@ local function addPastableEntities(tbl)
 	end
 end
 
-collectPastableEntities(tables.offerAttachNote)
-collectPastableEntities(tables.alwaysAttachNote)
+collectPastableEntities(config.offerAttachNote)
+collectPastableEntities(config.alwaysAttachNote)
 
-addPastableEntities(tables.offerAttachNote)
-addPastableEntities(tables.alwaysAttachNote)
+addPastableEntities(config.offerAttachNote)
+addPastableEntities(config.alwaysAttachNote)

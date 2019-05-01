@@ -1,12 +1,12 @@
-local tables = require("tables")
-local setting = tables.markerValues[settings.startup["note-marker-icon"].value]
+local config = require("config")
+local setting = config.markerValues[settings.startup["note-marker-icon"].value]
 
 local empty = {
 	filename = "__core__/graphics/empty.png",
 	priority = "extra-high",
 	line_length = 1,
-	width = 0,
-	height = 0,
+	width = 1,
+	height = 1,
 	frame_count = 1,
 	direction_count = 1,
 	animation_speed = 1,
@@ -25,13 +25,13 @@ local function createNoteStorage(name, placeable_by)
 		collision_box = {{-0.5, -0.5}, {0.5, 0.5}},
 		energy_source =
 		{
-			type = "electric",
+			type = "void",
 			usage_priority = "secondary-input",
 			input_flow_limit = "0W",
 			render_no_network_icon = false,
 			render_no_power_icon = false,
 		},
-		energy_usage_per_tick = "0W",
+		energy_usage_per_tick = "1W",
 		sprite = empty,
 		audible_distance_modifier = 0,
 		maximum_polyphony = 0,
@@ -75,7 +75,6 @@ data:extend{
 		speed = 0
 	},
 	createNoteStorage("blueprint-note-storage"), -- for entity attached notes
-	createNoteStorage("blueprint-attached-note", { item = "blueprint-note-storage", count = 1 }), -- for blueprint attached notes
 	{
 		type = "item",
 		name = "blueprint-note-storage",

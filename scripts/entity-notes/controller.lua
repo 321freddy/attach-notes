@@ -3,7 +3,7 @@ local util = scripts.util
 local components = scripts.components
 local gui = scripts["gui-tools"]
 local mod_gui = require("mod-gui")
-local tables = require("tables")
+local config = require("config")
 local templates = scripts["entity-notes.gui-templates"].templates
 
 local rebuildGuiOnSetting = {
@@ -78,11 +78,11 @@ function this.buildGUI(player, cache)
 	if util.isValid(opened) then
 		local note = global.notes[opened]
 		
-		if tables.offerAttachNote[opened.type] and not tables.alwaysAttachNote[opened.name] then -- create attach/delete note button if needed
+		if config.offerAttachNote[opened.type] and not config.alwaysAttachNote[opened.name] then -- create attach/delete note button if needed
 			gui.create(player, templates.attachNoteButton, { attached = (note ~= nil), settings = player.mod_settings, opened = opened, cache = cache })
 		end
 		
-		if tables.alwaysAttachNote[opened.type] or tables.alwaysAttachNote[opened.name] or (note and not cache.noteIsHidden) then
+		if config.alwaysAttachNote[opened.type] or config.alwaysAttachNote[opened.name] or (note and not cache.noteIsHidden) then
 			gui.create(player, templates.noteWindow, { note = note, settings = player.mod_settings, opened = opened })
 		end
 		

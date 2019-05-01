@@ -1,4 +1,4 @@
-local tables = require("tables")
+local config = require("config")
 
 data:extend{
 	{
@@ -48,31 +48,31 @@ data:extend{
 		name = "default-font",
 		setting_type = "runtime-per-user",
 		order = "ba",
-		default_value = tables.fonts[5],
-		allowed_values = tables.fonts
+		default_value = config.fonts[5],
+		allowed_values = config.fonts
 	},
 	{
 		type = "string-setting",
 		name = "default-text-color2",
 		setting_type = "runtime-per-user",
 		order = "bb",
-		default_value = tables.colors[2],
-		allowed_values = tables.colors
+		default_value = config.colors[2],
+		allowed_values = config.colors
 	},
 	{
 		type = "string-setting",
 		name = "default-title-color2",
 		setting_type = "runtime-per-user",
 		order = "bc",
-		default_value = tables.colors[2],
-		allowed_values = tables.colors
+		default_value = config.colors[2],
+		allowed_values = config.colors
 	},
 	{
 		type = "string-setting",
 		name = "note-marker-icon",
 		setting_type = "startup",
 		order = "a",
-		default_value = tables.markers[4],
-		allowed_values = tables.markers
+		default_value = config.markers[4],
+		allowed_values = config.markers
 	}
 }

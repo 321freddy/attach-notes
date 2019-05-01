@@ -1,11 +1,11 @@
-local tables = require("tables")
+local config = require("config")
 
 local empty = {
 	filename = "__core__/graphics/empty.png",
 	priority = "extra-high",
 	line_length = 1,
-	width = 0,
-	height = 0,
+	width = 1,
+	height = 1,
 	frame_count = 1,
 	direction_count = 1,
 	animation_speed = 1,
@@ -27,7 +27,7 @@ data:extend{
 		unit =
 		{
 		  count = 20,
-		  ingredients = {{"science-pack-1", 1}},
+		  ingredients = {{"automation-science-pack", 1}},
 		  time = 10
 		},
 		order = "a-k-a"
@@ -49,7 +49,6 @@ data:extend{
 		name = "signpost",
 		icon = "__attach-notes__/graphics/signpost-icon.png",
 		icon_size = 32,
-		flags = { "goes-to-quickbar" },
 		subgroup = "circuit-network",
 		order = "a[signpost]",	
 		place_result = "signpost",

@@ -1,5 +1,5 @@
 local util = {}
-local tables = require("tables")
+local config = require("config")
 
 function util.doEvery(tick, func, args)
 	if (game.tick % tick) == 0 then func(args) end
@@ -93,7 +93,7 @@ function util.supportsNotes(entity)
 	local type = entity.type == "entity-ghost" and entity.ghost_type or entity.type
 	
 	if name == "blueprint-note-storage" then return false end
-	return tables.offerAttachNote[type] or tables.alwaysAttachNote[type] or tables.alwaysAttachNote[name]
+	return config.offerAttachNote[type] or config.alwaysAttachNote[type] or config.alwaysAttachNote[name]
 end
 
 local function isTemporaryBp(player, stack) -- TODO: fix
@@ -116,13 +116,13 @@ function util.getColorOrDefault(name, settings, note, replacements)
 	if note and note[name.."Color"] then
 		local saved = note[name.."Color"]
 		if type(saved) == "table" then return saved end -- if rgb value is saved return it directly
-		color = tables.colors[saved]
+		color = config.colors[saved]
 	elseif settings then
 		if name == "label" then name = "title" end
 		color = settings["default-"..name.."-color2"].value
 	end
 	
-	return tables.colorFromName[(replacements and replacements[color]) or color]
+	return config.colorFromName[(replacements and replacements[color]) or color]
 end
 
 function util.shallowCopy(orig)
@@ -195,7 +195,7 @@ function util.localize(array, section)
 	return localized
 end
 
-function util.epairs(tbl) -- iterator for tables with entity based indices
+function util.epairs(tbl) -- iterator for config with entity based indices
 	local tblId = rawget(tbl, "id")
 	local tblPos = rawget(tbl, "pos")
 	local idIterator, posIterator

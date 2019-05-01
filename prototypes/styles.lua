@@ -1,18 +1,14 @@
 -- GUI styles --
 
+local config = require("config")
+
 local empty = {
-	type = "monolith",
-	monolith_border = 0,
-	monolith_image =
-	{
 		filename = "__core__/graphics/empty.png",
-		priority = "extra-high",
-		width = 0,
-		height = 0,
-		x = 0,
-		y = 0
+	position = {0, 0},
+	size = {1, 1},
+	scale = 0,
+	border = 0,
 	}
-}
 
 data.raw["gui-style"].default["entity_note_style"] =
 {
@@ -33,8 +29,8 @@ data.raw["gui-style"].default["entity_note_style"] =
 
 data.raw["gui-style"].default["entity_title_style"] =
 {
-	type = "textfield_style",
-	parent = "textfield",
+	type = "textbox_style",
+	parent = "textbox",
 	width = 237,
 	font = "default-large-bold",
 	graphical_set =
@@ -68,20 +64,26 @@ data.raw["gui-style"].default["color_picker_button_style"] =
 {
 	type = "button_style",
 	parent = "button",
-	left_padding = 1,
-	right_padding = 1,
-	top_padding = 2,
+	font = "default",
+	left_padding = 0,
+	right_padding = 0,
+	top_padding = -1,
 	bottom_padding = 0,
+	minimal_width = 0,
+	minimal_height = 0,
 }
 
 data.raw["gui-style"].default["color_button_style"] =
 {
 	type = "button_style",
 	parent = "button",
-	left_padding = 1,
-	right_padding = 1,
-	top_padding = 2,
+	font = "default",
+	left_padding = -1,
+	right_padding = -1,
+	top_padding = -1,
 	bottom_padding = 0,
+	minimal_width = 0,
+	minimal_height = 0,
 }
 
 data.raw["gui-style"].default["color_picker_frame_style"] =
@@ -91,7 +93,7 @@ data.raw["gui-style"].default["color_picker_frame_style"] =
 	
 	width = 265,
 	
-	left_padding = 0,
+	left_padding = -1,
 	right_padding = 0,
 	top_padding = 0,
 	bottom_padding = 0,
@@ -122,6 +124,10 @@ data.raw["gui-style"].default["icon_style"] =
 	right_padding = 0,
 	top_padding = 0,
 	bottom_padding = 0,
+	
+	minimal_width = 32,
+	minimal_height = 32,
+
 	default_graphical_set = empty,
 	hovered_graphical_set = empty,
 	clicked_graphical_set = empty
@@ -136,53 +142,33 @@ local function addButtonStyle(name, x, y)
         type = "button_style",
         parent = "button",
         width = 33,
-        height = 33,
+		height = 33,
         top_padding = 6,
         right_padding = 0,
         bottom_padding = 0,
         left_padding = 0,
         default_graphical_set =
         {
-            type = "monolith",
-            monolith_image =
-            {
                 filename = "__attach-notes__/graphics/gui.png",
-                priority = "extra-high-no-scale",
-                width = 32,
-                height = 32,
-                x = x,
-				y = y,
-            }
+			position = {x, y},
+			size = {32, 32},	        
         },
         hovered_graphical_set =
         {
-            type = "monolith",
-            monolith_image =
-            {
                 filename = "__attach-notes__/graphics/gui.png",
-                priority = "extra-high-no-scale",
-                width = 32,
-                height = 32,
-                x = x + 32,
-				y = y,
-            }
+			position = {x + 32, y},
+			size = {32, 32},	        
         },
         clicked_graphical_set =
         {
-            type = "monolith",
-            monolith_image =
-            {
                 filename = "__attach-notes__/graphics/gui.png",
-                width = 32,
-                height = 32,
-                x = x + 64,
-				y = y,
-            }
+			position = {x + 64, y},
+			size = {32, 32},    
         }
 	}
 end
 
-addButtonStyle("add", 64)
+addButtonStyle("add", 64, 0)
 addButtonStyle("delete", 64, 32)
-addButtonStyle("edit", 160)
+addButtonStyle("edit", 160, 0)
 addButtonStyle("view", 160, 32)

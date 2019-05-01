@@ -7,13 +7,12 @@ require("framework"){
 		"components",
 		"gui-tools",
 		GUI("entity-notes"),
-		GUI("blueprint-notes"),
 
 	},
 
 	inputs = {  -- custom inputs
 
-		"edit-blueprint", -- SHIFT + F
+		
 
 	}
 	

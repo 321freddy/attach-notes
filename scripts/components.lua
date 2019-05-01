@@ -2,7 +2,7 @@
 
 local components = {}
 local util = scripts.util
-local tables = require("tables")
+local config = require("config")
 
 local function getMarkerOffset(entity) -- generates marker offsets with some crazy math
 	local pos, boundingBox, selectionBox = entity.position, entity.bounding_box, entity.prototype.selection_box
@@ -32,7 +32,7 @@ end
 components.marker = {
 	create = function (entity)
 		local pos = entity.position
-		local offset = tables.markerOffsets[entity.name] or getMarkerOffset(entity)
+		local offset = config.markerOffsets[entity.name] or getMarkerOffset(entity)
 		
 		return entity.surface.create_entity{
 			name = "note-marker",
@@ -41,7 +41,7 @@ components.marker = {
 		}
 	end,
 	isDisabledForEntity = function (entity)
-		return tables.disableMarker[entity.type] or tables.disableMarker[entity.name]
+		return config.disableMarker[entity.type] or config.disableMarker[entity.name]
 	end,
 	showByDefault = function (note)
 		return not note.text
@@ -84,7 +84,7 @@ components.mapTag = {
 components.flyingText = {
 	create = function (entity, note, player)
 		local pos = entity.position
-		local offset = tables.titleOffsets[entity.name] or getFlyingTextOffset(entity)
+		local offset = config.titleOffsets[entity.name] or getFlyingTextOffset(entity)
 		local title = note.title and util.fullTrim(note.title) or " "
 		if #title == 0 then title = " " end
 		
@@ -106,7 +106,7 @@ components.flyingText = {
 		end
 	end,
 	isDisabledForEntity = function (entity)
-		return tables.disableTitle[entity.type]
+		return config.disableTitle[entity.type]
 	end,
 	showByDefault = function (note)
 		return not note.title
@@ -176,7 +176,7 @@ components.bpInterface = { -- blueprintable representation of the note (programm
 		note.bpInterface = components.bpInterface.create(entity)
 	end,
 	isDisabledForEntity = function (entity)
-		return tables.disableTitle[entity.type]
+		return config.disableTitle[entity.type]
 	end,
 	showByDefault = true
 }

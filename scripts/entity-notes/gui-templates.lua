@@ -3,7 +3,7 @@
 local this = {templates = {}}
 local util = scripts.util
 local components = scripts.components
-local tables = require("tables")
+local config = require("config")
 local gui = scripts["gui-tools"]
 local controller
 
@@ -96,7 +96,7 @@ local function createColorPickerButton(name, getTarget, onCreated)
 			end
 		end,
 		onClicked = function (event)
-			local frame = event.element.parent.parent[name.."-color-picker-frame"].style
+			local frame = event.element.parent.parent[name.."-color-picker-frame"]
 			frame.visible = not frame.visible
 		end
 	}
@@ -109,13 +109,13 @@ local function createColorPickerFrame(name, onColorChanged)
 		direction = "horizontal",
 		style = "color_picker_frame_style",
 		onCreated = function (self, data)
-			self.style.visible = false
+			self.visible = false
 		end,
 		children = {
 			{
 				type = "table",
 				name = name.."-color-picker-table",
-				column_count = #tables.colors,
+				column_count = #config.colors,
 				style = "color_picker_table_style",
 				children = {}
 			}
@@ -123,7 +123,7 @@ local function createColorPickerFrame(name, onColorChanged)
 	}
 	
 	local tableChildren = frame.children[1].children
-	for i,color in ipairs(tables.colors) do
+	for i,color in ipairs(config.colors) do
 		tableChildren[i] = createNoteGuiElement{
 			type = "button",
 			name = name.."-color-"..color,
@@ -131,7 +131,7 @@ local function createColorPickerFrame(name, onColorChanged)
 			caption = "█",
 			style = "color_button_style",
 			onCreated = function (self, data)
-				self.style.font_color = tables.colorFromName[color]
+				self.style.font_color = config.colorFromName[color]
 				self.style.hovered_font_color = self.style.font_color
 				self.style.clicked_font_color = self.style.font_color
 			end,
@@ -139,7 +139,7 @@ local function createColorPickerFrame(name, onColorChanged)
 				local self = event.element
 				
 				note[name.."Color"] = i
-				self.parent.parent.style.visible = false
+				self.parent.parent.visible = false
 				onColorChanged(self.parent.parent, self.style.font_color, note, player)
 			end
 		}
@@ -237,12 +237,14 @@ local function createSettingsFlow(data)
 		type = "flow",
 		name = data.name.."-settings",
 		direction = data.direction or "horizontal",
-		onCreated = function (self, data)
+		onCreated = function (self, onCreatedData)
 			if #self.children == 0 then
 				self.destroy()
 			else
 				self.style.horizontally_stretchable = true
 			end
+
+			if data.onCreated then data.onCreated(self, onCreatedData) end
 		end,
 		children = data.children
 	}
@@ -255,23 +257,24 @@ this.templates.noteWindow = {
 	children = {
 		createSettingsFlow{
 			name = "frame-header",
+			onCreated = function (self, data)
+				self.style.vertical_align = "center"
+				self.style.bottom_margin = 8
+			end,
 			children = {
 				{
 					type = "label",
 					name = "frame-caption",
+					style = "heading_1_label",
 					onCreated = function (self, data)
 						self.caption = data.opened.localised_name
-						local style = self.style
-						style.bottom_padding = 5
-						style.font = "default-frame"
 					end,
 				},
 				{
-					type = "sprite-button", -- invisible
+					type = "flow", -- invisible spacer
 					name = "spacer",
-					style = "icon_style",
+					direction = "horizontal",
 					onCreated = function (self, data)
-						self.enabled = false
 						self.style.horizontally_stretchable = true
 						self.style.horizontally_squashable = true
 					end,
@@ -301,6 +304,10 @@ this.templates.noteWindow = {
 		},
 		createSettingsFlow{
 			name = "tag",
+			onCreated = function (self, data)
+				self.style.vertical_align = "center"
+				self["title-color-picker-button"].style.top_margin = 2
+			end,
 			children = {
 				createLinkedElement{
 					type = "choose-elem-button",
@@ -338,7 +345,8 @@ this.templates.noteWindow = {
 						self.tooltip = { "tooltips.title" }
 						self.style = "entity_title_style"
 						self.style.font_color = util.getColorOrDefault("title", data.settings, note)
-						
+						self.style.height = 32
+
 						if util.isValid(self.parent["icon-chooser"]) then -- shorten width if necessary
 							self.style.width = 237 - 40
 						end
@@ -370,7 +378,15 @@ this.templates.noteWindow = {
 			create = { "marker", "bpInterface" },
 			onCreated = function (self, data)
 				local note = data.note
-				if note and note.text then self.text = note.text end
+				if note and note.text then
+					local text = note.text
+
+					if string.sub(text, -1) ~= "\n" then -- ensure note has newline at end of text
+						text = text.."\n"
+					end
+
+					self.text = text
+				end
 				self.style = "entity_note_style"
 				self.style.font_color = util.getColorOrDefault("text", data.settings, note)
 			end,
@@ -389,16 +405,20 @@ this.templates.noteWindow = {
 					type = "drop-down",
 					name = "font",
 					style = "font_settings_style",
-					items = util.concat({{"attach-notes-gui.select-font"}}, util.localize(tables.fonts, "fonts")),
+					items = util.concat({{"attach-notes-gui.select-font"}}, util.localize(config.fonts, "fonts")),
 					onCreated = function (self, data)
 						local textBox, note = self.parent.parent["note-text"], data.note -- update text box font
 						if note and note.font then
-							textBox.style.font = tables.fonts[note.font]
+							textBox.style.font = config.fonts[note.font]
 							self.selected_index = note.font + 1
 						else
 							textBox.style.font = data.settings["default-font"].value
 							self.selected_index = 1
 						end
+
+						local text = textBox.text -- fix game not applying font correctly
+						textBox.text = ""
+						textBox.text = text
 					end,
 					onSelectionStateChanged = function (event)
 						local index = event.player_index
@@ -464,6 +484,10 @@ this.templates.notePreview = {
 	children = {
 		createSettingsFlow{
 			name = "tag",
+			onCreated = function (self, data)
+				self.style.vertical_align = "center"
+				self.style.bottom_margin = 2
+			end,
 			children = {
 				createLinkedElement{
 					type = "sprite-button", -- simple sprites don't support dynamic sprite changing
@@ -472,6 +496,7 @@ this.templates.notePreview = {
 					style = "icon_style",
 					create = { "mapTag", "bpInterface" },
 					onCreated = function (self, data)
+						self.style.right_margin = 4
 						local note = data.note
 						if note and note.icon then self.sprite = "item/"..note.icon.name else self.destroy() end
 					end,
@@ -512,7 +537,7 @@ this.templates.notePreview = {
 				
 				local note = data.note -- update text box font
 				if note and note.font then
-					self.style.font = tables.fonts[note.font]
+					self.style.font = config.fonts[note.font]
 				else
 					self.style.font = data.settings["default-font"].value
 				end
