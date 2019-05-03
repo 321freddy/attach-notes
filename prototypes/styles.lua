@@ -16,15 +16,27 @@ data.raw["gui-style"].default["entity_note_style"] =
 	parent = "textbox",
 	width = 265,
 	height = 330,
-	graphical_set =
+	left_padding = 0,
+	right_padding = 5,
+
+	default_background =
 	{
-		type = "composition",
-		filename = "__core__/graphics/gui.png",
-		priority = "extra-high-no-scale",
-		corner_size = {3, 3},
-		position = {16, 0},
-		opacity = 0.5
+		base = {position = {248, 0}, corner_size = 8, opacity = 0.7},
+		shadow = textbox_dirt
 	},
+	disabled_font_color = util.premul_color {1, 1, 1, 0.5},
+	active_background =
+	{
+		base = {position = {265, 0}, corner_size = 8, opacity = 0.7},
+		shadow = textbox_dirt
+	},
+	disabled_background =
+	{
+		base = {position = {282, 0}, corner_size = 8, opacity = 0.7},
+		shadow = textbox_dirt
+	},
+	selection_background_color= {241, 190, 100},
+	rich_text_setting = "enabled"
 }
 
 data.raw["gui-style"].default["entity_title_style"] =
@@ -33,24 +45,25 @@ data.raw["gui-style"].default["entity_title_style"] =
 	parent = "textbox",
 	width = 237,
 	font = "default-large-bold",
-	graphical_set =
+
+	default_background =
 	{
-		type = "composition",
-		filename = "__core__/graphics/gui.png",
-		priority = "extra-high-no-scale",
-		corner_size = {3, 3},
-		position = {16, 0},
-		opacity = 0.5
+		base = {position = {248, 0}, corner_size = 8, opacity = 0.7},
+		shadow = textbox_dirt
 	},
-}
-	
-data:extend{
+	disabled_font_color = util.premul_color {1, 1, 1, 0.5},
+	active_background =
 	{
-		type = "font",
-		name = "color-picker-button",
-		from = "default-bold",
-		size = 14
+		base = {position = {265, 0}, corner_size = 8, opacity = 0.7},
+		shadow = textbox_dirt
 	},
+	disabled_background =
+	{
+		base = {position = {282, 0}, corner_size = 8, opacity = 0.7},
+		shadow = textbox_dirt
+	},
+	selection_background_color= {241, 190, 100},
+	rich_text_setting = "enabled"
 }
 
 data.raw["gui-style"].default["font_settings_style"] =

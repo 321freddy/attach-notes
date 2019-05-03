@@ -443,7 +443,6 @@ this.templates.noteWindow = {
 				},
 				createColorPickerButton("text", function (self) return self.parent.parent["note-text"] end,
 					function (self) -- onCreated
-						self.style.font = "color-picker-button"
 						self.caption = self.caption..self.caption
 						self.style.top_padding = 0
 					end)
