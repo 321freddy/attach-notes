@@ -1,5 +1,6 @@
 local util = {}
 local config = require("config")
+local metatables = scripts and scripts.metatables
 
 function util.doEvery(tick, func, args)
 	if (game.tick % tick) == 0 then func(args) end
@@ -96,20 +97,6 @@ function util.supportsNotes(entity)
 	return config.offerAttachNote[type] or config.alwaysAttachNote[type] or config.alwaysAttachNote[name]
 end
 
-local function isTemporaryBp(player, stack) -- TODO: fix
-	return util.mod("PickerExtended") and stack.label and (
-				stack.label:find("Belt Brush") or
-				stack.label:find("Pipette Blueprint"))
-end
-
-function util.supportsBpNote(stack) 
-	return util.isValidStack(stack) and stack.is_blueprint and stack.is_blueprint_setup() and not isTemporaryBp(player, stack) -- or stack.is_blueprint_book
-end	
-
-function util.isEmptyBp(stack)
-	return util.isValidStack(stack) and stack.is_blueprint and not stack.is_blueprint_setup() 
-end
-
 function util.getColorOrDefault(name, settings, note, replacements)
 	local color = "white" --"black"
 	
@@ -152,15 +139,18 @@ function util.deepCopy(orig)
     return copy
 end
 
-
 function util.countTable(tbl)
 	local count = 0
-	for _,__ in pairs(tbl) do count = count + 1 end
+	for __ in pairs(tbl) do count = count + 1 end
 	return count
 end
 
-function util.isEmpty(tbl)
-	return type(tbl) ~= "table" or next(tbl) == nil
+function util.isEmpty(tbl) -- empty table
+	return type(tbl) == "table" and next(tbl) == nil
+end
+
+function util.isFilled(tbl) -- filled table
+	return type(tbl) == "table" and next(tbl) ~= nil
 end
 
 function util.findInTable(tbl, func)
@@ -193,6 +183,10 @@ function util.localize(array, section)
 		localized[i] = {section..val}
 	end
 	return localized
+end
+
+function util.createRenderingWrapper(id)
+	return metatables.use({ __id = id }, "rendering")
 end
 
 function util.epairs(tbl) -- iterator for config with entity based indices
