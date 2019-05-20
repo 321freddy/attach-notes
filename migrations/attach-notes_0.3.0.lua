@@ -17,7 +17,10 @@ refreshHelpers(global)
 
 
 -- Update metatables
-rawset(global.notes, "__mt", "entityAsIndex")
+-- Update player cache metatables
+if global.notes then
+	rawset(global.notes, "__mt", "entityAsIndex")
+end
 
 
 log("Attach notes: Global metatables have been updated")
