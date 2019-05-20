@@ -309,18 +309,28 @@ end
 
 function this.convertBlueprint(player, cache, stack) -- replace note interfaces of a blueprint with actual note storages
 	local entities = stack.get_blueprint_entities() or {}
-	for _,entity in ipairs(entities) do
-		if entity.name == "blueprint-note-interface" then
-			local note = cache.blueprint[entity.control_behavior.filters[1].count] -- get cached note using the saved unit number from interface
-			if note then
-				entity.name = "blueprint-note-storage" -- convert interface to storage
-				entity.control_behavior = nil
-				entity.alert_parameters = this.encodeNote(note) -- save encoded note
-			end
+	local newEntities = {}
+	
+	for i,entity in pairs(entities) do
+		if entity.name ~= "blueprint-note-interface" then
+			newEntities[i] = entity
 		end
+
+		-- if entity.name == "blueprint-note-interface" then
+		-- 	local note = cache.blueprint[entity.control_behavior.filters[1].count] -- get cached note using the saved unit number from interface
+		-- 	if note then
+		-- 		entity.name = "blueprint-note-storage" -- convert interface to storage
+		-- 		entity.control_behavior = nil
+		-- 		entity.alert_parameters = this.encodeNote(note) -- save encoded note
+		-- 	end
+		-- end
 	end
 	
-	stack.set_blueprint_entities(entities)
+	-- dlog("BEFORE:",entities)
+	-- stack.set_blueprint_entities(entities)
+	stack.set_blueprint_entities(newEntities)
+	-- dlog("AFTER:",stack.get_blueprint_entities())
+
 	cache.blueprint = nil
 end
 
