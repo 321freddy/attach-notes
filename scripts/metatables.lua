@@ -46,25 +46,26 @@ this.entityAsIndex = { -- metatable for using an entity as a table index
 				local tblId = rawget(tbl, "id")
 				if tblId then return tblId[id] end
 			else
+				local pos = entity.position
+				local index = table.concat({ entity.surface.index, pos.x, pos.y }, ";")
 				local tblPos = rawget(tbl, "pos")
-			
-				if tblPos then 
-					local surface, pos = entity.surface.name, entity.position
-					local x, y = pos.x, pos.y
-					local tbls = tblPos[surface]
-					
-					if tbls then
-						local tblsx = tbls[x]
-						if tblsx then return tblsx[y] end
-					end
-				end
+				if tblPos then return tblPos[index] end
 			end
+		elseif type(entity) == "number" then -- index is unit number
+			local tblId = rawget(tbl, "id")
+			if tblId then return tblId[entity] end
 		end
     end,
 	
 	__newindex = function (tbl, entity, value)
-		local id = entity.unit_number
 		local count = rawget(tbl, "count") or 0
+		
+		local id
+		if type(entity) == "number" then -- index is unit number
+			id = entity
+		else
+			id = entity.unit_number
+		end
 		
 		if id then -- entities indexed by unit number
 			local tblId = rawget(tbl, "id")
@@ -81,52 +82,38 @@ this.entityAsIndex = { -- metatable for using an entity as a table index
 					tblId[id] = value
 				end
 			elseif value ~= nil then
-				rawset(tbl, "id", { [entity.unit_number] = value })
+				rawset(tbl, "id", { [id] = value })
 				rawset(tbl, "count", count + 1)
 			end
 		else -- other entities that don't support unit number indexed by their surface and position
-			local surface, pos = entity.surface.name, entity.position
-			local x, y = pos.x, pos.y
+			local pos = entity.position
+			local index = table.concat({ entity.surface.index, pos.x, pos.y }, ";")
 			local tblPos = rawget(tbl, "pos")
 			
-			if tblPos then
-				local tbls = tblPos[surface]
-				
-				if tbls then
-					local tblsx = tbls[x]
-					
-					if tblsx then
-						local oldvalue = tblsx[y]
-						if value ~= oldvalue then
-							if value == nil then
-								rawset(tbl, "count", count - 1)
-							else
-								rawset(tbl, "count", count + 1)
-							end
-							
-							tblsx[y] = value
-						end
-					elseif value ~= nil then
-						tbls[x] = { [y] = value }
+			if tblPos then 
+				local oldvalue = tblPos[index]
+				if value ~= oldvalue then
+					if value == nil then
+						rawset(tbl, "count", count - 1)
+					else
 						rawset(tbl, "count", count + 1)
 					end
-				elseif value ~= nil then
-					tblPos[surface] = { [x] = { [y] = value } }
-					rawset(tbl, "count", count + 1)
+					
+					tblPos[index] = value
 				end
 			elseif value ~= nil then
-				rawset(tbl, "pos", { [surface] = { [x] = { [y] = value } } })
+				rawset(tbl, "pos", { [index] = value })
 				rawset(tbl, "count", count + 1)
 			end
 		end
-	end,
+    end,
 	
 	__len = function (tbl)
 		return rawget(tbl, "count") or 0
-	end,
+	end
 }
 
-this.rendering = {
+this.rendering = { -- wrapper metatable for renderings, so they can be used like entities
 	__index = function(t, k)
 		local id = rawget(t, "__id")
 

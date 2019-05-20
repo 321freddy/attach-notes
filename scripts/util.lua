@@ -189,7 +189,7 @@ function util.createRenderingWrapper(id)
 	return metatables.use({ __id = id }, "rendering")
 end
 
-function util.epairs(tbl) -- iterator for config with entity based indices
+function util.epairs(tbl) -- iterator for tables with entity based indices
 	local tblId = rawget(tbl, "id")
 	local tblPos = rawget(tbl, "pos")
 	local idIterator, posIterator
