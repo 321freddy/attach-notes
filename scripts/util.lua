@@ -93,7 +93,7 @@ function util.supportsNotes(entity)
 	local name = entity.type == "entity-ghost" and entity.ghost_name or entity.name
 	local type = entity.type == "entity-ghost" and entity.ghost_type or entity.type
 	
-	if name == "blueprint-note-storage" then return false end
+	if name == "blueprint-note-storage-new" then return false end
 	return config.offerAttachNote[type] or config.alwaysAttachNote[type] or config.alwaysAttachNote[name]
 end
 

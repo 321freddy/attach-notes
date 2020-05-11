@@ -7,6 +7,7 @@ data:extend{
 		order = "fb",
 		icon = "__attach-notes__/graphics/signpost-icon.png",
 		icon_size = 32,
+        icon_mipmaps = 1,
 	}
 }
 
@@ -36,6 +37,7 @@ local function generateIcon(name, subgroup, file, wrappedEntity, size)
 			localised_name = wrappedEntity and {"entity-name."..name} or nil,
 			icon = file or "__attach-notes__/graphics/signpost-icons/"..name.."-icon.png",
 			icon_size = size or 32,
+            icon_mipmaps = 1,
 			subgroup = subgroup,
 			order = string.rep("a", order),
 		}

@@ -14,8 +14,9 @@ local empty = {
 
 local function createNoteStorage(name, placeable_by)
 	return {
-		type = "programmable-speaker",
+		type = "constant-combinator",
 		name = name,
+		item_slot_count = 5000,
 		icon = "__attach-notes__/graphics/"..setting.sprite,
 		icon_size = 42,
 		flags = { "player-creation", "placeable-off-grid", "not-deconstructable", "not-repairable", "not-on-map" },
@@ -23,19 +24,17 @@ local function createNoteStorage(name, placeable_by)
 		selectable_in_game = false,
 		collision_mask = {},
 		collision_box = {{-0.5, -0.5}, {0.5, 0.5}},
-		energy_source =
+		sprites = { north = empty, east = empty, south = empty, west = empty, },
+		activity_led_sprites = { north = empty, east = empty, south = empty, west = empty, },
+		activity_led_light_offsets = { {0,0}, {0,0}, {0,0}, {0,0} },
+		circuit_wire_connection_points =
 		{
-			type = "void",
-			usage_priority = "secondary-input",
-			input_flow_limit = "0W",
-			render_no_network_icon = false,
-			render_no_power_icon = false,
+			{ shadow = { red = {0, 0}, green = {0, 0} }, wire = { red = {0, 0}, green = {0, 0} } },
+			{ shadow = { red = {0, 0}, green = {0, 0} }, wire = { red = {0, 0}, green = {0, 0} } },
+			{ shadow = { red = {0, 0}, green = {0, 0} }, wire = { red = {0, 0}, green = {0, 0} } },
+			{ shadow = { red = {0, 0}, green = {0, 0} }, wire = { red = {0, 0}, green = {0, 0} } }
 		},
-		energy_usage_per_tick = "1W",
-		sprite = empty,
-		audible_distance_modifier = 0,
-		maximum_polyphony = 0,
-		instruments = {},
+		circuit_wire_max_distance = 0,
 		placeable_by = placeable_by,
 	}
 end
@@ -74,16 +73,16 @@ data:extend{
 		time_to_live = 99999999,
 		speed = 0
 	},
-	createNoteStorage("blueprint-note-storage"), -- for entity attached notes
+	createNoteStorage("blueprint-note-storage-new"), -- for entity attached notes
 	{
 		type = "item",
-		name = "blueprint-note-storage",
+		name = "blueprint-note-storage-new",
 		icon = "__attach-notes__/graphics/"..setting.sprite,
 		icon_size = 42,
 		flags = { "hidden" },
 		subgroup = "circuit-network",
 		order = "a[signpost]b",	
-		place_result = "blueprint-note-storage",
+		place_result = "blueprint-note-storage-new",
 		stack_size = 1
     },
 	{
@@ -116,7 +115,7 @@ data:extend{
 		icon_size = 42,
 		flags = { "hidden" },
 		subgroup = "circuit-network",
-		order = "a[signpost]c",	
+		order = "a[signpost]c",
 		place_result = "blueprint-note-interface",
 		stack_size = 1
     },
