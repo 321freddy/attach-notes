@@ -1,8 +1,9 @@
 ---------------------------------------------------------------------------------------------------
 Version: 0.4.0
+Date: 2020-05-12
   Changes:
-    - Update for Factorio 0.18
-    - Added blueprint notes
+    - Update for Factorio 0.18. Thanks to xmnovotny!
+    - Fixed notes not being saved in blueprints
 ---------------------------------------------------------------------------------------------------
 Version: 0.3.1
   Bugfixes:
