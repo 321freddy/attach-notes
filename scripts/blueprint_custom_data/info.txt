@@ -1,0 +1,19 @@
+--------------------------------------------------------------------------------------------------------------------------------
+-- Author: thelordodin
+-- Special thanks to Mooncat - who guided me how to do this.
+-- License: free to copy, change, and use in any projects. No warranty.
+--------------------------------------------------------------------------------------------------------------------------------
+This library allows you to save custom data to combinator entiry.
+Custom data must be in lua table format.
+
+Data is stored as values of signals in combinator.
+
+To save data to combinator use:
+	write_to_combinator(combinator, data)
+
+To load:
+	data = read_from_combinator(combinator)
+
+Be warned that data size is very limited by item_slot_count parameter of combinator.
+
+Not deeply tested, but works somehow...

@@ -11,12 +11,15 @@ local empty = {
 	animation_speed = 1,
 }
 
+local sounds = require("__base__.prototypes.entity.demo-sounds")
+
 data:extend{
 	{
 		type = "technology",
 		name = "signpost",
 		icon = "__attach-notes__/graphics/signpost-icon.png",
 		icon_size = 32,
+        icon_mipmaps = 1,
 		effects =
 		{
 		  {
@@ -49,6 +52,7 @@ data:extend{
 		name = "signpost",
 		icon = "__attach-notes__/graphics/signpost-icon.png",
 		icon_size = 32,
+        icon_mipmaps = 1,
 		subgroup = "circuit-network",
 		order = "a[signpost]",	
 		place_result = "signpost",
@@ -60,6 +64,7 @@ data:extend{
 		render_layer = "object",
 		icon = "__attach-notes__/graphics/signpost-icon.png",
 		icon_size = 32,
+        icon_mipmaps = 1,
 		flags = { "placeable-neutral", "player-creation" },
 		minable = { mining_time = 0.5, result = "signpost" },
 		max_health = 200,
@@ -77,7 +82,7 @@ data:extend{
 		corpse = "small-remnants",
 		collision_box = {{-0.2, -0.2}, {0.2, 0.2}},
 		selection_box = {{-0.5, -0.5}, {0.5, 0.5}},
-		vehicle_impact_sound =  { filename = "__base__/sound/car-metal-impact.ogg", volume = 0.65 },
+		vehicle_impact_sound = sounds.generic_impact,
 		fluid_box =
 		{
 		  base_area = 0.0000001,
@@ -111,6 +116,7 @@ data:extend{
 		name = "signpost-display",
 		icon = "__base__/graphics/icons/iron-chest.png",
 		icon_size = 32,
+        icon_mipmaps = 1,
 		flags = { "placeable-off-grid", "not-repairable", "not-blueprintable", "not-deconstructable", "not-on-map" },
 		collision_mask = {},
 		max_health = 1,

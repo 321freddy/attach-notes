@@ -5,6 +5,7 @@ local gui = scripts["gui-tools"]
 local mod_gui = require("mod-gui")
 local config = require("config")
 local templates = scripts["entity-notes.gui-templates"].templates
+local bcd = require("scripts.blueprint_custom_data.blueprint_custom_data")
 
 local rebuildGuiOnSetting = {
 	["default-font"] = true,
@@ -279,7 +280,7 @@ function this.filterStorages(stack) -- filter out note storages if their entity 
 			notePairs[key] = notePairs[key] or {}
 			local ref = notePairs[key]
 			
-			if entity.name == "blueprint-note-storage" or 
+			if entity.name == "blueprint-note-storage-new" or
 			   entity.name == "blueprint-note-interface" then
 				ref.storage = entity
 			else
@@ -309,32 +310,22 @@ end
 
 function this.convertBlueprint(player, cache, stack) -- replace note interfaces of a blueprint with actual note storages
 	local entities = stack.get_blueprint_entities() or {}
-	local newEntities = {}
-	
-	for i,entity in pairs(entities) do
-		if entity.name ~= "blueprint-note-interface" then
-			newEntities[i] = entity
+	for _,entity in ipairs(entities) do
+		if entity.name == "blueprint-note-interface" then
+			local note = cache.blueprint[entity.control_behavior.filters[1].count] -- get cached note using the saved unit number from interface
+			if note then
+				entity.name = "blueprint-note-storage-new" -- convert interface to storage
+				entity.control_behavior = nil
+				this.encodeNote(note, entity) -- save encoded note
+			end
 		end
-
-		-- if entity.name == "blueprint-note-interface" then
-		-- 	local note = cache.blueprint[entity.control_behavior.filters[1].count] -- get cached note using the saved unit number from interface
-		-- 	if note then
-		-- 		entity.name = "blueprint-note-storage" -- convert interface to storage
-		-- 		entity.control_behavior = nil
-		-- 		entity.alert_parameters = this.encodeNote(note) -- save encoded note
-		-- 	end
-		-- end
 	end
 	
-	-- dlog("BEFORE:",entities)
-	-- stack.set_blueprint_entities(entities)
-	stack.set_blueprint_entities(newEntities)
-	-- dlog("AFTER:",stack.get_blueprint_entities())
-
+	stack.set_blueprint_entities(entities)
 	cache.blueprint = nil
 end
 
-function this.encodeNote(note)
+function this.encodeNote(note, entity)
 	local encodedNote = {
 		text = note.text,
 		title = note.title,
@@ -349,22 +340,22 @@ function this.encodeNote(note)
 			encodedNote[name] = util.isValid(note[name])
 		end
 	end
-
-	return {
-		show_alert = false,
-		show_on_map = false,
-		alert_message = serpent.dump(encodedNote)
-	}
+	local params = bcd.get_combinator_params(encodedNote)
+	if params then
+		entity.control_behavior = {
+			filters = params
+		}
+	end
 end
 
 function this.decodeNote(storage) -- reads storage contents and destroys storage
 	storage.teleport{1000000, 1000000} -- teleport storage to avoid the deletion of other ghosts during the following revival
 	local _, revived = storage.revive()
 	if revived then
-		local params = revived.alert_parameters
+		local params = bcd.read_from_combinator(revived)
 		revived.destroy()
-		
-		return loadstring(params.alert_message)()
+
+		return params
 	end
 end
 
@@ -373,14 +364,14 @@ function this.on_built_entity(event)
 	local notes = global.notes
 	
 	if entity.name == "entity-ghost" or entity.name == "tile-ghost" then -- handle blueprint placement
-		if entity.ghost_name == "blueprint-note-storage" then
+		if entity.ghost_name == "blueprint-note-storage-new" then
 			--dlog("built ghost storage at "..serpent.line(entity.position)..", un: "..entity.unit_number)
 			local ghosts = entity.surface.find_entities_filtered{
 				name = "entity-ghost", 
 				force = entity.force,
 				area = util.getSurroundingArea(entity.position, 0.01) 
 			}
-			
+
 			for _,ghost in ipairs(ghosts) do
 				--if not util.isValid(entity) then break end
 			
@@ -392,9 +383,11 @@ function this.on_built_entity(event)
 						local note = this.decodeNote(entity)
 						--dlog("decoded note: "..serpent.line(note))
 						-- create blueprint interface which contains the ghosts unit number
-						note.bpInterface = components.bpInterface.create(ghost)
-						notes[ghost] = note
-						--dlog("ghost "..ghost.ghost_name.." at "..serpent.line(ghost.position).." had the saved note "..serpent.line(note))
+						if note then
+							note.bpInterface = components.bpInterface.create(ghost)
+							notes[ghost] = note
+							--dlog("ghost "..ghost.ghost_name.." at "..serpent.line(ghost.position).." had the saved note "..serpent.line(note))
+						end
 					end
 					return
 				end
@@ -408,6 +401,7 @@ function this.on_built_entity(event)
 	else
 		this.restoreGhostNote(entity)
 	end
+
 end
 
 function this.on_robot_built_entity(event)
