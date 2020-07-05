@@ -7,5 +7,5 @@
   "contact": "",
   "homepage": "",
   "description": "Attach notes to combinators, entities... almost everything \r\n + Adds signposts. \r\n\r\nAll notes are saved when you export a blueprint as a string (but you need the mod to read them).",
-  "dependencies": ["base >= 0.18.0", "?Flare Stack"]
+  "dependencies": ["base >= 0.18.0", "?Flare Stack", "?aai-programmable-vehicles"]
 }
