@@ -27,7 +27,7 @@ this.templates.attachNoteButton = {
 	onClicked = function (event)
 		local player = event.element.gui.player
 		local settings = player.mod_settings
-		local opened = player.opened
+		local opened = controller.getOpenedEntity(player)
 		local notes = global.notes
 		local cache = global.cache[player.index]
 		

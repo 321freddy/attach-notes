@@ -72,11 +72,20 @@ function this.destroyPreviewGUI(player)
 	gui.destroy(player, templates.notePreview)
 end
 
+function this.getOpenedEntity(player)
+	if game.active_mods["MathCoProcessor"] and player.opened_gui_type == defines.gui_type.custom then
+		return player.opened.preview.entity
+	end
+
+	return player.opened
+end
+
 function this.buildGUI(player, cache)
 	this.destroyGUI(player, cache)
-	local opened = player.opened
+	local opened = this.getOpenedEntity(player)
 	
 	if util.isValid(opened) then
+
 		local note = global.notes[opened]
 		
 		if config.offerAttachNote[opened.type] and not config.alwaysAttachNote[opened.name] then -- create attach/delete note button if needed
