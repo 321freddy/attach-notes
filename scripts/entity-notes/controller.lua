@@ -148,6 +148,7 @@ function this.on_pre_player_mined_item(event) -- close gui and delete data when 
 end
 
 this.on_robot_pre_mined = this.on_pre_player_mined_item
+this.on_robot_mined_entity = this.on_pre_player_mined_item
 
 function this.on_entity_died(event)
 	local entity = event.entity
@@ -382,6 +383,7 @@ end
 function this.on_built_entity(event)
 	local entity = event.created_entity
 	local notes = global.notes
+	dlog("on_built_entity",event)
 	
 	if entity.name == "entity-ghost" or entity.name == "tile-ghost" then -- handle blueprint placement
 		if entity.ghost_name == "blueprint-note-storage-new" then
