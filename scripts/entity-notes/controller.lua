@@ -13,11 +13,13 @@ local rebuildGuiOnSetting = {
 	["default-title-color2"] = true
 }
 
+local i=0
 function this.on_gui_opened(event)
 	local index = event.player_index
 	local player = game.players[index]
 	local cache = global.cache[index]
-
+	dlog("on_gui_opened",i,event,player.opened)	
+	i=i+1
 	-- clear blueprint cache if player stops editing blueprint
 	if event.gui_type ~= defines.gui_type.item then
 		cache.blueprint = nil
@@ -31,7 +33,7 @@ function this.on_gui_opened(event)
 			this.buildGUI(player, cache) -- create edit window
 		end
 		
-	elseif cache.openedEntityGui then
+	elseif cache.openedEntityGui and player.surface.name ~= "compact-circuits" then
 		this.destroyGUI(player, cache)
 	end
 end
@@ -40,11 +42,30 @@ function this.on_gui_closed(event)
 	local index = event.player_index
 	local player = game.players[index]
 	local cache = global.cache[index]
+	dlog("on_gui_closed",i,event,player.opened)
+	i=i+1
 
-	this.destroyGUI(player, cache)
-	
+	if player.surface.name ~= "compact-circuits" or
+		event.gui_type == defines.gui_type.entity or
+		event.gui_type == defines.gui_type.custom then
+		this.destroyGUI(player, cache)
+	end
+
 	local stack = event.item
 	if util.isValidStack(stack) then this.filterStorages(stack) end
+end
+
+function this.on_player_changed_surface(event)
+	local index = event.player_index
+	local player = game.players[index]
+	local cache = global.cache[index]
+	local surface = game.surfaces[event.surface_index]
+	dlog("on_player_changed_surface",i,event,surface)
+	i=i+1
+
+	if surface.name == "compact-circuits" then
+		this.destroyGUI(player, cache)
+	end
 end
 
 function this.on_selected_entity_changed(event) 
@@ -77,7 +98,7 @@ function this.buildGUI(player, cache)
 	--this.destroyGUI(player, cache)
 	gui.destroy(player, templates.attachNoteButton)
 	gui.destroy(player, templates.noteWindow)
-
+	
 	local opened = cache.openedEntityGui
 	
 	if util.isValid(opened) then
