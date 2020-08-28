@@ -27,6 +27,7 @@ function this.on_gui_opened(event)
 		if cache.openedEntityGui ~= event.entity then
 			cache.noteIsHidden = player.mod_settings["hide-note-by-default"].value -- read hidden by default setting
 		
+			cache.openedEntityGui = event.entity
 			this.buildGUI(player, cache) -- create edit window
 		end
 		
@@ -72,17 +73,12 @@ function this.destroyPreviewGUI(player)
 	gui.destroy(player, templates.notePreview)
 end
 
-function this.getOpenedEntity(player)
-	if game.active_mods["MathCoProcessor"] and player.opened_gui_type == defines.gui_type.custom then
-		return player.opened.preview.entity
-	end
-
-	return player.opened
-end
-
 function this.buildGUI(player, cache)
-	this.destroyGUI(player, cache)
-	local opened = this.getOpenedEntity(player)
+	--this.destroyGUI(player, cache)
+	gui.destroy(player, templates.attachNoteButton)
+	gui.destroy(player, templates.noteWindow)
+
+	local opened = cache.openedEntityGui
 	
 	if util.isValid(opened) then
 
@@ -96,7 +92,7 @@ function this.buildGUI(player, cache)
 			gui.create(player, templates.noteWindow, { note = note, settings = player.mod_settings, opened = opened })
 		end
 		
-		cache.openedEntityGui = opened
+		-- cache.openedEntityGui = opened
 		this.buildPreviewGUI(player, cache)
 	end
 end
