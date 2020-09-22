@@ -29,18 +29,20 @@ config.markerValues = {
 }
 
 config.disableMarker = {
-	["locomotive"]  = true,
-	["fluid-wagon"] = true,
-	["cargo-wagon"] = true,
-	["car"]         = true,
-	["signpost"]    = true,
+	["locomotive"]     = true,
+	["fluid-wagon"]    = true,
+	["cargo-wagon"]    = true,
+	["car"]            = true,
+	["spider-vehicle"] = true,
+	["signpost"]       = true,
 }
 
 config.disableTitle = {
-	["locomotive"]  = true,
-	["fluid-wagon"] = true,
-	["cargo-wagon"] = true,
-	["car"]         = true,
+	["locomotive"]     = true,
+	["fluid-wagon"]    = true,
+	["cargo-wagon"]    = true,
+	["car"]            = true,
+	["spider-vehicle"] = true,
 }
 
 config.alwaysAttachNote = {
