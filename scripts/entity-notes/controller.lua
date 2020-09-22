@@ -149,6 +149,7 @@ end
 
 this.on_robot_pre_mined = this.on_pre_player_mined_item
 this.on_robot_mined_entity = this.on_pre_player_mined_item
+this.script_raised_destroy = this.on_pre_player_mined_item
 
 function this.on_entity_died(event)
 	local entity = event.entity
@@ -381,7 +382,7 @@ function this.decodeNote(storage) -- reads storage contents and destroys storage
 end
 
 function this.on_built_entity(event)
-	local entity = event.created_entity
+	local entity = event.created_entity or event.entity
 	local notes = global.notes
 	dlog("on_built_entity",event)
 	
@@ -425,6 +426,8 @@ function this.on_built_entity(event)
 	end
 
 end
+
+this.script_raised_revive = this.on_built_entity
 
 function this.on_robot_built_entity(event)
 	this.restoreGhostNote(event.created_entity)
