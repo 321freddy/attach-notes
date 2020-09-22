@@ -71,7 +71,8 @@ data:extend{
 		name = "title-flying-text",
 		flags = {"not-on-map", "placeable-off-grid"},
 		time_to_live = 99999999,
-		speed = 0
+		speed = 0,
+		text_alignment = "center",
 	},
 	createNoteStorage("blueprint-note-storage-new"), -- for entity attached notes
 	{
