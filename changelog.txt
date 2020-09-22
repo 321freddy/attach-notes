@@ -3,8 +3,7 @@ Version: 0.4.6
 Date: 2020-09-22
   Changes:
     - Note titles are now centered
-  Bugfixes:
-    -  
+    - Compatibility with Creative mod
 ---------------------------------------------------------------------------------------------------
 Version: 0.4.5
 Date: 2020-08-29
