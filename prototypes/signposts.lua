@@ -61,6 +61,7 @@ data:extend{
 	{
 		type = "storage-tank", -- storage tank can have an empty ingame gui which can be opened (even without circuit conditions)
 		name = "signpost",
+		se_allow_in_space = true,
 		render_layer = "object",
 		icon = "__attach-notes__/graphics/signpost-icon.png",
 		icon_size = 32,
