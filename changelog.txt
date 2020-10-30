@@ -1,4 +1,12 @@
 ---------------------------------------------------------------------------------------------------
+Version: 0.4.8
+Date: 2020-10-30
+  Changes:
+    - Compatibility with Space Exploration mod
+  Bugfixes:
+    - Fixed leftover notes when destroying entities
+    - Fixed signposts not showing icons
+---------------------------------------------------------------------------------------------------
 Version: 0.4.7
 Date: 2020-09-22
   Changes:
