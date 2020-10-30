@@ -151,20 +151,30 @@ this.on_robot_pre_mined = this.on_pre_player_mined_item
 this.on_robot_mined_entity = this.on_pre_player_mined_item
 this.script_raised_destroy = this.on_pre_player_mined_item
 
-function this.on_entity_died(event)
-	local entity = event.entity
+function this.on_post_entity_died(event)
+	local unitNumber = event.unit_number
+	local ghost = event.ghost
 	local notes = global.notes
+	local note = notes[unitNumber]
 	
-	if notes[entity] then
+	if note then
 		for name in pairs(components) do
 			if name ~= "bpInterface" then 
-				util.destroyIfValid(notes[entity][name])
+				if util.isValid(note[name]) then
+					note[name].destroy()
+					note[name] = true
+				else
+					note[name] = nil
+				end
 			end
 		end
+
+		notes[ghost] = note
+		components.bpInterface.update(ghost, note)
 	end
 	
 	for index,cache in pairs(global.cache) do
-		if cache.openedEntityGui == entity then
+		if not util.isValid(cache.openedEntityGui) then
 			this.destroyGUI(game.players[index], cache)
 		end
 	end
