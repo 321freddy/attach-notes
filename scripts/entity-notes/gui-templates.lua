@@ -370,7 +370,7 @@ this.templates.noteWindow = {
 			pickerButton.clicked_font_color = color
 			tagSettings.title.style.font_color = color
 			
-			components.flyingText.update(entity, note, player)
+			components.flyingText.update(nil, note, player)
 		end),
 		createLinkedElement{
 			type = "text-box",
