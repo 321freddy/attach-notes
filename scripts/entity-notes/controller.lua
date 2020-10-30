@@ -394,7 +394,7 @@ end
 function this.on_built_entity(event)
 	local entity = event.created_entity or event.entity
 	local notes = global.notes
-	dlog("on_built_entity",event)
+	-- dlog("on_built_entity",event)
 	
 	if entity.name == "entity-ghost" or entity.name == "tile-ghost" then -- handle blueprint placement
 		if entity.ghost_name == "blueprint-note-storage-new" then

@@ -28,10 +28,10 @@ for __,surface in pairs(game.surfaces) do
 				if not foundEntity then 
 					local note = global.notes[unitNumber]
 
-					if note.marker and note.marker.valid then note.marker.destroy() end
-					if note.mapTag and note.mapTag.valid then note.mapTag.destroy() end
-					if note.flyingText and note.flyingText.valid then note.flyingText.destroy() end
-					if note.display and note.display.valid then note.display.destroy() end
+					if type(note.marker) == "table" and note.marker.valid then note.marker.destroy() end
+					if type(note.mapTag) == "table" and note.mapTag.valid then note.mapTag.destroy() end
+					if type(note.flyingText) == "table" and note.flyingText.valid then note.flyingText.destroy() end
+					if type(note.display) == "table" and note.display.valid then note.display.destroy() end
 					interface.destroy()
 					
 					global.notes[unitNumber] = nil
