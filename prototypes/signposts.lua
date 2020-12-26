@@ -11,7 +11,7 @@ local empty = {
 	animation_speed = 1,
 }
 
-local sounds = require("__base__.prototypes.entity.demo-sounds")
+local sounds = require("__base__.prototypes.entity.sounds")
 
 data:extend{
 	{

@@ -48,7 +48,12 @@ function this.on_gui_closed(event)
 	end
 
 	local stack = event.item
-	if util.isValidStack(stack) then this.filterStorages(stack) end
+	if util.isValidStack(stack) and stack.is_blueprint and stack.is_blueprint_setup() then 
+		if cache.blueprint then
+			this.convertBlueprint(player, cache, stack)
+		end
+		this.filterStorages(stack) 
+	end
 end
 
 function this.on_player_changed_surface(event)
@@ -141,7 +146,9 @@ function this.on_pre_player_mined_item(event) -- close gui and delete data when 
 	end
 	
 	for index,cache in pairs(global.cache) do
-		if cache.openedEntityGui == entity then
+		if not util.isValid(game.players[index]) then
+			global.cache[index] = nil
+		elseif cache.openedEntityGui == entity then
 			this.destroyGUI(game.players[index], cache)
 		end
 	end
@@ -152,29 +159,36 @@ this.on_robot_mined_entity = this.on_pre_player_mined_item
 this.script_raised_destroy = this.on_pre_player_mined_item
 
 function this.on_post_entity_died(event)
+	local notes = global.notes
 	local unitNumber = event.unit_number
 	local ghost = event.ghost
-	local notes = global.notes
-	local note = notes[unitNumber]
 	
-	if note then
-		for name in pairs(components) do
-			if name ~= "bpInterface" then 
-				if util.isValid(note[name]) then
-					note[name].destroy()
-					note[name] = true
-				else
-					note[name] = nil
+	if unitNumber ~= nil and util.isValid(ghost) then
+		local note = notes[unitNumber]
+		
+		if note then
+			for name in pairs(components) do
+				if name ~= "bpInterface" then 
+					if util.isValid(note[name]) then
+						note[name].destroy()
+						note[name] = true
+					else
+						note[name] = nil
+					end
 				end
 			end
-		end
 
-		notes[ghost] = note
-		components.bpInterface.update(ghost, note)
+			notes[ghost] = note
+			components.bpInterface.update(ghost, note)
+		end
+	elseif unitNumber ~= nil then
+		notes[unitNumber] = nil
 	end
-	
+
 	for index,cache in pairs(global.cache) do
-		if not util.isValid(cache.openedEntityGui) then
+		if not util.isValid(game.players[index]) then
+			global.cache[index] = nil
+		elseif not util.isValid(cache.openedEntityGui) then
 			this.destroyGUI(game.players[index], cache)
 		end
 	end
@@ -427,9 +441,11 @@ function this.on_built_entity(event)
 			end
 			
 			entity.destroy()
-			--dlog("WARNING: could not restore note, no actual ghost entity found")
-		--else
-			--dlog("built non storage ghost "..entity.ghost_name.." at "..serpent.line(entity.position)..", un: "..entity.unit_number)
+			-- dlog("WARNING: could not restore note, no actual ghost entity found")
+		elseif entity.ghost_name == "blueprint-note-interface" then
+			entity.destroy()
+		else
+			-- dlog("built non storage ghost "..entity.ghost_name.." at "..serpent.line(entity.position)..", un: "..entity.unit_number)
 		end
 	else
 		this.restoreGhostNote(entity)

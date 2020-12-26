@@ -111,7 +111,7 @@ function bcd.get_combinator_params(data)
 end
 -------------------------------------------------------------------------------------------------------------------------------
 function bcd.read_from_combinator(combinator)
-	local params = combinator.get_or_create_control_behavior().parameters.parameters
+	local params = combinator.get_or_create_control_behavior().parameters
 	local numbers = {}
 
 	for _, p in pairs(params) do
