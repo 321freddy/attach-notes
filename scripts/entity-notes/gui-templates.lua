@@ -497,7 +497,11 @@ this.templates.notePreview = {
 					onCreated = function (self, data)
 						self.style.right_margin = 4
 						local note = data.note
-						if note and note.icon then self.sprite = "item/"..note.icon.name else self.destroy() end
+						if note and note.icon and game.is_valid_sprite_path("item/"..note.icon.name) then 
+							self.sprite = "item/"..note.icon.name 
+						else 
+							self.destroy() 
+						end
 					end,
 				},
 				createLinkedElement{
