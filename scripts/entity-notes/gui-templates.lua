@@ -324,7 +324,11 @@ this.templates.noteWindow = {
 						end
 					end,
 					onChanged = function (event, index, player, cache, entity, note)
-						note.icon = event.element.elem_value
+						if event.element.elem_value.name then
+							note.icon = event.element.elem_value
+						else
+							event.element.elem_value = note and note.icon
+						end
 					end,
 				},
 				createLinkedElement{
@@ -497,7 +501,11 @@ this.templates.notePreview = {
 					onCreated = function (self, data)
 						self.style.right_margin = 4
 						local note = data.note
-						if note and note.icon then self.sprite = "item/"..note.icon.name else self.destroy() end
+						if note and note.icon and note.icon.name and game.is_valid_sprite_path("item/"..note.icon.name) then 
+							self.sprite = "item/"..note.icon.name 
+						else 
+							self.destroy() 
+						end
 					end,
 				},
 				createLinkedElement{
