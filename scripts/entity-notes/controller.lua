@@ -521,4 +521,24 @@ function this.restoreGhostNote(entity) -- restore an entity note when it got rev
 	end
 end
 
+function this.on_string_translated(event)
+	local index = event.player_index
+	local player = game.players[index]
+	local cache = global.cache[index]
+
+	dlog(event)
+	
+	if util.isValid(cache.translateTarget) and event.translated then
+		event.name = defines.events.on_gui_text_changed
+		event.element = cache.translateTarget
+		event.text = event.result
+		cache.translateTarget.text = event.result
+		gui.on_gui_text_changed(event)
+		cache.translateTarget.focus()
+		cache.translateTarget.select_all()
+	end
+
+	cache.translateTarget = nil
+end
+
 return this

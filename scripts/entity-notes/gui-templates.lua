@@ -324,10 +324,23 @@ this.templates.noteWindow = {
 						end
 					end,
 					onChanged = function (event, index, player, cache, entity, note)
-						if event.element.elem_value.name then
+						if not event.element.elem_value or event.element.elem_value.name then
 							note.icon = event.element.elem_value
 						else
 							event.element.elem_value = note and note.icon
+						end
+
+						if note and not note.title and note.icon then
+							--raises event to call onChanged on title field after translation
+							cache.translateTarget = event.element.parent.title
+
+							local proto = game.item_prototypes[note.icon.name] or
+										  game.entity_prototypes[note.icon.name] or
+										  game.fluid_prototypes[note.icon.name] or
+										  game.virtual_signal_prototypes[note.icon.name] or
+										  game.tile_prototypes[note.icon.name]
+
+							if proto then player.request_translation(proto.localised_name) end
 						end
 					end,
 				},
