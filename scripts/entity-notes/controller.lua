@@ -158,6 +158,27 @@ this.on_robot_pre_mined = this.on_pre_player_mined_item
 this.on_robot_mined_entity = this.on_pre_player_mined_item
 this.script_raised_destroy = this.on_pre_player_mined_item
 
+function this.on_entity_destroyed(event)
+	if not event.unit_number then return end
+	dlog(event)
+
+	local unitNumber = event.unit_number
+	local notes = global.notes
+	
+	if notes[unitNumber] then
+		for name in pairs(components) do util.destroyIfValid(notes[unitNumber][name]) end
+		notes[unitNumber] = nil
+	end
+	
+	for index,cache in pairs(global.cache) do
+		if not util.isValid(game.players[index]) then
+			global.cache[index] = nil
+		elseif cache.openedEntityGui and cache.openedEntityGui.unit_number == unitNumber then
+			this.destroyGUI(game.players[index], cache)
+		end
+	end
+end
+
 function this.on_post_entity_died(event)
 	local notes = global.notes
 	local unitNumber = event.unit_number
@@ -409,6 +430,12 @@ function this.on_built_entity(event)
 	local entity = event.created_entity or event.entity
 	local notes = global.notes
 	-- dlog("on_built_entity",event)
+
+	-- Fix for transport drones mod replacing entity supply-depot with supply-depot-chest
+	if entity.name == "supply-depot" then
+		local chest = entity.surface.find_entity("supply-depot-chest", entity.position)
+		if util.isValid(chest) then entity = chest end
+	end
 	
 	if entity.name == "entity-ghost" or entity.name == "tile-ghost" then -- handle blueprint placement
 		if entity.ghost_name == "blueprint-note-storage-new" then
