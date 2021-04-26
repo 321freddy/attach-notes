@@ -474,6 +474,10 @@ function this.restoreGhostNote(entity) -- restore an entity note when it got rev
 		
 		local note = notes[entity] -- revive components
 		if not note then return end
+
+		if note.icon and not game.is_valid_sprite_path("item/"..note.icon.name) then 
+			note.icon = nil
+		end
 		
 		util.destroyIfValid(note.bpInterface)
 		for name,component in pairs(components) do
