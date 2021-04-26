@@ -1,4 +1,14 @@
 ---------------------------------------------------------------------------------------------------
+Version: 0.5.1
+Date: 2021-04-26
+  Changes:
+    - Added autofill for title bar
+    - Compatibility with Transport Drones mod
+  Bugfixes:
+    - Fixed crash when placing old blueprints
+    - Fixed crash when selecting "?" signal
+    - Fixed crash when playing Rail signals basic tutorial
+---------------------------------------------------------------------------------------------------
 Version: 0.5.0
 Date: 2020-12-26
   Changes:
