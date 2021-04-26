@@ -1,5 +1,5 @@
 
-local metatables = require("scripts.metatables")
+local metatables = require("__attach-notes__.scripts.metatables")
 metatables.refresh(global)
 
 for __,surface in pairs(game.surfaces) do
