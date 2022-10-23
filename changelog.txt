@@ -1,4 +1,10 @@
 ---------------------------------------------------------------------------------------------------
+Version: 0.5.2
+Date: 2022-10-23
+Bugfixes:
+    - Fixed crash when launching pod with cargo in Space Exploration mod
+    https://mods.factorio.com/mod/attach-notes/discussion/62c12765caa02a955856391a
+---------------------------------------------------------------------------------------------------
 Version: 0.5.1
 Date: 2021-04-26
   Changes:
