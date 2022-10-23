@@ -173,7 +173,11 @@ function this.on_entity_destroyed(event)
 	for index,cache in pairs(global.cache) do
 		if not util.isValid(game.players[index]) then
 			global.cache[index] = nil
-		elseif cache.openedEntityGui and cache.openedEntityGui.unit_number == unitNumber then
+		elseif cache.openedEntityGui
+		-- Tireons bugfix 0.5.2
+		and cache.openedEntityGui.valid
+		-- bugfix end
+		and cache.openedEntityGui.unit_number == unitNumber then
 			this.destroyGUI(game.players[index], cache)
 		end
 	end
